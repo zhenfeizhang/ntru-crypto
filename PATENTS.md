@@ -7,6 +7,7 @@ GPL
 NTRU cryptographic patents may be used  as long as the user adheres to version two (2) or three (3) of the GPL License. For  details please refer to COPYING-2.txt or COPYING-3.txt included in this distribution. 
 
 The GPLv2 license may also be found on the gnu.org website at: (http://www.gnu.org/licenses/gpl-2.0.html)
+
 The GPLv3 license may also be found on the gnu.org website at: (https://gnu.org/licenses/gpl.html).
 
 Commercial Licensing
