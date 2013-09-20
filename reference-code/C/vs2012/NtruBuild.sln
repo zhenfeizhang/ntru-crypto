@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NtruEncrypt_DLL", "NtruEncrypt_DLL.vcxproj", "{2F9FC904-1627-4105-BD03-4EDB6401C071}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_NtruEncrypt", "Sample_NTRUEncrypt.vcxproj", "{269723B0-D865-4097-9650-EB0C0350D91A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2F9FC904-1627-4105-BD03-4EDB6401C071} = {2F9FC904-1627-4105-BD03-4EDB6401C071}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
