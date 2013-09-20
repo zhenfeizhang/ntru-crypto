@@ -30,7 +30,8 @@
  * Innovation Commercial License for proprietary or non-opensource applications, 
  * both of which accompany this distribution and are also available at:
  *
- *       http://www.gnu.org/licenses/gpl-3.0.html   
+ *       http://www.gnu.org/licenses/gpl.html   
+ *       http://www.gnu.org/licenses/gpl-2.0.html)
  *                      and 
  *       http://www.securityinnovation.com/NTRUlicense.doc 
  *
