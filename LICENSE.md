@@ -14,5 +14,5 @@ The GPLv3 license may also be found on the gnu.org website at:
 
 Commercial Licensing
 ====================
-Businesses and enterprises that wish to incorporate NTRU cryptography into proprietary appliances or other commercial software products for re-distribution must have a commercial license. Commercial licenses are available using flexible licensing terms on a one time per product fee or running royalty.  For details please refer to COMMERCIAL LICENSE.doc included in this distribution.  The commercial license may also be found at the security Innovation website (http://www.securityinnovation.com/NTRUlicense.doc)
+Businesses and enterprises that wish to incorporate NTRU cryptography into proprietary applications or other non-open source commercial software products for re-distribution must have a commercial license. Commercial licenses are available using flexible licensing terms on a one time per product fee or running royalty.  For details please refer to COMMERCIAL LICENSE.doc included in this distribution.  The commercial license may also be found at the security Innovation website (http://www.securityinnovation.com/NTRUlicense.doc)
 
