@@ -26,9 +26,9 @@
  *
  *
  * This program and the accompanying materials are made available under the
- * terms of the GPL version 3 license for non-commercial use and the Security
- * Innovation Commercial License for commercial applications, both of which
- * accompany this distribution and are also available at:
+ * terms of the GPL version 2 or 3 license for open source use and the Security
+ * Innovation Commercial License for proprietary or non-opensource applications, 
+ * both of which accompany this distribution and are also available at:
  *
  *       http://www.gnu.org/licenses/gpl-3.0.html   
  *                      and 
