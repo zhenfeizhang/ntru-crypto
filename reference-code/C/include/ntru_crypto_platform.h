@@ -36,3 +36,53 @@
  *
  *****************************************************************************/
  
+/******************************************************************************
+ *
+ * File: ntru_crypto_platform.h
+ *
+ * Contents: Platform-specific basic definitions.
+ *
+ *****************************************************************************/
+
+#ifndef NTRU_CRYPTO_PLATFORM_H
+#define NTRU_CRYPTO_PLATFORM_H
+
+/* The default implementation is to use stdint.h, a part of the C99 standard.
+ * Systems that don't support this are handled on a case-by-case basis.
+ */
+
+#if defined(WIN32) && (_MSC_VER < 1600)
+
+#include <basetsd.h>
+typedef unsigned char       uint8_t;
+typedef signed char         int8_t;
+typedef unsigned short int  uint16_t;
+typedef short int           int16_t;
+typedef UINT32              uint32_t;
+typedef UINT64              uint64_t;
+
+#elif defined(linux) && defined(__KERNEL__)
+
+#include <linux/types.h>
+
+#else
+
+#include <stdint.h>
+
+#endif
+
+#if !defined(HAVE_BOOL) && !defined(__cplusplus)
+#define HAVE_BOOL
+typedef uint8_t bool;
+#endif /* HAVE_BOOL */
+
+#ifndef TRUE
+#define TRUE    1
+#endif
+
+#ifndef FALSE
+#define FALSE   0
+#endif
+
+
+#endif /* NTRU_CRYPTO_PLATFORM_H */

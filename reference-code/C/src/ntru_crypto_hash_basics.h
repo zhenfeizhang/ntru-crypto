@@ -36,3 +36,54 @@
  *
  *****************************************************************************/
  
+/******************************************************************************
+ *
+ * File: ntru_crypto_hash_basics.h
+ *
+ * Contents: Common definitions for all hash algorithms.
+ *
+ *****************************************************************************/
+
+#ifndef NTRU_CRYPTO_HASH_BASICS_H
+#define NTRU_CRYPTO_HASH_BASICS_H
+
+#include "ntru_crypto_platform.h"
+
+
+/**************
+ * algorithms *
+ **************/
+
+typedef enum {
+    NTRU_CRYPTO_HASH_ALGID_NONE = 0,
+    NTRU_CRYPTO_HASH_ALGID_SHA1,
+    NTRU_CRYPTO_HASH_ALGID_SHA256,
+} NTRU_CRYPTO_HASH_ALGID;
+
+
+/***************
+ * error codes *
+ ***************/
+
+#define NTRU_CRYPTO_HASH_OK              ((uint32_t)0x00)
+#define NTRU_CRYPTO_HASH_FAIL            ((uint32_t)0x01)
+#define NTRU_CRYPTO_HASH_BAD_PARAMETER   ((uint32_t)0x02)
+#define NTRU_CRYPTO_HASH_OVERFLOW        ((uint32_t)0x03)
+#define NTRU_CRYPTO_HASH_BAD_ALG         ((uint32_t)0x20)
+#define NTRU_CRYPTO_HASH_OUT_OF_MEMORY   ((uint32_t)0x21)
+
+// For backward-compatibility
+typedef uint32_t NTRU_CRYPTO_HASH_ERROR;
+
+
+/*********
+ * flags *
+ *********/
+
+#define HASH_DATA_ONLY      0
+#define HASH_INIT           (1 << 0)
+#define HASH_FINISH         (1 << 1)
+#define HASH_ZERO_PAD       (1 << 2)
+
+
+#endif /* NTRU_CRYPTO_HASH_BASICS_H */

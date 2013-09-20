@@ -36,3 +36,25 @@
  *
  *****************************************************************************/
  
+/******************************************************************************
+ *
+ * File:  ntru_crypto_error.h
+ *
+ * Contents: Contains base values for crypto error codes.
+ *
+ *****************************************************************************/
+
+
+#ifndef NTRU_CRYPTO_ERROR_H
+#define NTRU_CRYPTO_ERROR_H
+
+/* define base values for crypto error codes */
+
+#define HASH_ERROR_BASE     ((uint32_t)0x00000100)
+#define HMAC_ERROR_BASE     ((uint32_t)0x00000200)
+#define SHA_ERROR_BASE      ((uint32_t)0x00000400)
+#define DRBG_ERROR_BASE     ((uint32_t)0x00000a00)
+#define NTRU_ERROR_BASE     ((uint32_t)0x00003000)
+#define MGF1_ERROR_BASE     ((uint32_t)0x00004100)
+
+#endif /* NTRU_CRYPTO_ERROR_H */

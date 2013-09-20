@@ -36,3 +36,44 @@
  *
  *****************************************************************************/
  
+/******************************************************************************
+ *
+ * File: ntru_crypto_sha.h
+ *
+ * Contents: Definitions and declarations common to all SHA hash algorithms.
+ *
+ *****************************************************************************/
+
+#ifndef NTRU_CRYPTO_SHA_H
+#define NTRU_CRYPTO_SHA_H
+
+
+#include "ntru_crypto_error.h"
+#include "ntru_crypto_hash_basics.h"
+
+
+/***************
+ * error codes *
+ ***************/
+
+#define SHA_OK              ((uint32_t)NTRU_CRYPTO_HASH_OK)
+#define SHA_FAIL            ((uint32_t)NTRU_CRYPTO_HASH_FAIL)
+#define SHA_BAD_PARAMETER   ((uint32_t)NTRU_CRYPTO_HASH_BAD_PARAMETER)
+#define SHA_OVERFLOW        ((uint32_t)NTRU_CRYPTO_HASH_OVERFLOW)
+
+#define SHA_RESULT(r)   ((uint32_t)((r) ? SHA_ERROR_BASE + (r) : (r)))
+#define SHA_RET(r)      return SHA_RESULT(r);
+
+
+/*********
+ * flags *
+ *********/
+
+#define SHA_DATA_ONLY       HASH_DATA_ONLY
+#define SHA_INIT            HASH_INIT
+#define SHA_FINISH          HASH_FINISH
+#define SHA_ZERO_PAD        HASH_ZERO_PAD
+
+
+#endif /* NTRU_CRYPTO_SHA_H */
+

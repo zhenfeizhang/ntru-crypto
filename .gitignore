@@ -1,2 +1,21 @@
+# Generated directories that can be ignored
+reference-code/C/src/obj/
+reference-code/C/sample/obj/
+reference-code/C/lib/
+reference-code/C/bin/
 
-.DS_Store
+# bash files that can be ignored
+*.bash_history
+
+# Vi backup files that can be ignored
+*~
+
+# VS-generated directories and files that can be ignored
+reference-code/C/vs2012/Win32/
+reference-code/C/vs2012/x64/
+*.ncb
+*.opensdf
+*.sdf
+*.suo
+*.user
+build.log
