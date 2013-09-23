@@ -2,7 +2,7 @@
  * NTRU Cryptography Reference Source Code
  * Copyright (c) 2009-2013, by Security Innovation, Inc. All rights reserved. 
  *
- * ntru_crypto_ntru_encrypt_param_sets.c is a component of ntru-crypto.
+ * ntru_crypto_ntru_encrypt_param_sets.h is a component of ntru-crypto.
  *
  * Copyright (C) 2009-2013  Security Innovation
  * 
