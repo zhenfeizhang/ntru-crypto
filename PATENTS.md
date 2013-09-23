@@ -4,7 +4,7 @@ Security Innovation NTRU cryptographic software invention and reference source c
 
 GPL
 ===========
-NTRU cryptographic patents may be used  as long as the user adheres to version two (2) of the GPL License. For  details please refer to COPYING-2.txt or COPYING-3.txt included in this distribution. 
+NTRU cryptographic patents may be used  as long as the user adheres to version two (2) of the GPL License. For  details please refer to COPYING-2.txt included in this distribution. 
 
 The GPLv2 license may also be found on the gnu.org website at: (http://www.gnu.org/licenses/gpl-2.0.html)
 
