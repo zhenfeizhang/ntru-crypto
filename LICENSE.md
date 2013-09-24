@@ -4,7 +4,7 @@ Security Innovation NTRU cryptographic software invention and reference source c
 
 GPL
 ===========
-NTRU cryptographic IP and reference software  may be used and modified to the needs of the user as long as the user adheres to version two (2) of the GPL License. For  details please refer to COPYING-2.txt included in this distribution. 
+NTRU cryptographic IP and reference software  may be used and modified to the needs of the user as long as the user adheres to version two (2) or higher of the GPL License. For  details please refer to COPYING-2.txt included in this distribution. 
 
 The GPLv2 license may also be found on the gnu.org website at:
 (http://www.gnu.org/licenses/gpl-2.0.html)
