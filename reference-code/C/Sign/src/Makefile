@@ -1,4 +1,12 @@
-CC=gcc
+PARAMSETS=433 577 769 1153
+
+# Directories.
+TOPDIR = ..
+BINDIR = $(TOPDIR)/bin
+DATADIR = $(TOPDIR)/data
+DIRS = $(BINDIR) $(DATADIR)
+
+vpath %.dat $(DATADIR)
 
 CFLAGS += -c
 CFLAGS += -Wall
@@ -6,47 +14,37 @@ CFLAGS += -O3 -ffast-math -mtune=native -malign-double
 
 LDFLAGS = -lfftw3 -lm
 
-
-SOURCES=bsparseconv.c\
-		crypto_hash_sha512.c\
-		formatc.c\
-		poly.c\
-		hash.c\
-		ntt.c\
-		key.c\
-		sign.c\
-		verify.c\
-		crypto_stream.c\
-		randombytes.c\
-		fastrandombytes.c\
-		bench.c
-
+SOURCES=$(wildcard *.c)
 OBJECTS=$(SOURCES:.c=.o)
-EXECUTABLE=bench
+EXECUTABLE=$(TOPDIR)/bin/bench
 
-PARAMSETS=433 577 769 1153
 
-all: wisdom data $(SOURCES) $(EXECUTABLE)
+all: dirs wisdom data $(SOURCES) $(EXECUTABLE)
 
-vpath %.dat data
-wisdom: $(addsuffix _wisdom.dat, $(PARAMSETS))
-%_wisdom.dat :
-	./wiseup.sh $*
+dirs : $(DIRS)
+	mkdir -p $?
 
-data: $(addsuffix _rader.dat, $(PARAMSETS))
-data: $(addsuffix _perm.dat, $(PARAMSETS))
-data: $(addsuffix _points.dat, $(PARAMSETS))
+# Ensure all FFTW wisdom files exist
+wisdom: $(addprefix $(TOPDIR)/data/, $(addsuffix _wisdom.dat, $(PARAMSETS)))
+$(TOPDIR)/data/%_wisdom.dat :
+	$(BINDIR)/wiseup.sh $*
+
+data: $(addprefix $(TOPDIR)/data/, $(addsuffix _rader.dat, $(PARAMSETS)))
+data: $(addprefix $(TOPDIR)/data/, $(addsuffix _perm.dat, $(PARAMSETS)))
+data: $(addprefix $(TOPDIR)/data/, $(addsuffix _points.dat, $(PARAMSETS)))
 %_rader.dat %_points.dat %_perm.dat:
 	$(warning Runtime data for set $* not present ($@). See README.)
 
-$(EXECUTABLE): $(OBJECTS) 
+$(EXECUTABLE): $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 .c.o:
 	$(CC) $(CFLAGS) $< -o $@
 
+.PHONY : clean
 clean:
-	rm -rf *.o $(EXECUTABLE)
+	rm -f $(OBJECTS)
+	rm -f $(EXECUTABLE)
 
 
 
