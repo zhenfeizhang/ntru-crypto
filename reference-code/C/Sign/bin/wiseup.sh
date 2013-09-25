@@ -20,7 +20,7 @@
 # along with CPASSREF.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-DEST=./data/$1_wisdom.dat
+DEST=../data/$1_wisdom.dat
 
 factors=( $(factor $1) )
 if [ -z "${factors[2]}" ]
