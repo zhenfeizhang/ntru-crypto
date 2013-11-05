@@ -28,23 +28,39 @@ FAQ
 ===
 What is NTRU?
 -------------
-NTRU is an asymmetric (public/private key) cryptosystem.  It is a leading alternative to RSA and ECC as it is faster and quantum resistant.  There are two NTRU based algorithms:  NTRU Encrypt and NTRU Sign.  Both cryptosystems are being released under GPL. The portable C/C++ & Java implementation in this project is also available under GPL.
+NTRU is a lattice-based public key cryptosystem from Security Innovation and the leading alternative to RSA and Elliptic Curve Cryptography (ECC) due to its higher performance and resistance to attacks from quantum computers.    NTRU was developed in 1996 as a visionary solution to cyber security challenges for the twenty-first century. NTRU is based on a mathematical problem called the “Approximate close lattice vector problem” and comprises three algorithms:  NTRUEncrypt, NTRUSign, and PASSSign.  It has been reviewed and published in scholarly journals and presented at Crypto, Eurocrypt, and RSA, and has been adopted in IEEE and X9 standards
 
 What makes NTRU fast?
 ---------------------
 Because it is based on different math from RSA and ECC, the NTRU algorithm has different cryptographic properties.   At comparable cryptographic strength, NTRU performs costly private key operations much faster than RSA or ECC.  In addition, NTRU's comparative performance increases with the level of security required.  As key sizes increase by a factor of n, RSA's operations/second decrease by about n3 whereas NTRU's decrease at n2.
 
+Which applications/industries would benefit most from NTRU?
+-----------------------------------------------------------
+Any application that requires fast performance (large amounts of data to be protected in a short amount of time) and/or high-levels of security for the next 10 years would benefit from the NTRU solution.  Furthermore, the small code size (small footprint) of the NTRU implementations make it suitable for even small embedded processors.
+
+These applications include Payment Systems,  secure messaging and email, mobile eCommerce, Healthcare, Near Field Communications (NFC), Vehicle Communications (V2V, V2I), Military/Aerospace, Web Browsers and Servers, Remote Backup Solutions, Voice over IP (VoIP), Online Presentations/Virtual Classrooms, Infrastructure (Railway switching, Traffic lights, etc), Utility meters and Cloud Provides/Datacenters.
+
 What makes NTRU quantum computing resistant?
 --------------------------------------------
 NTRU is currently not known to be vulnerable to algorithms based on quantum computers, unlike RSA or its other challenger, Elliptic Curve Cryptography. A working, full-scale quantum computer running the process known as “Shor’s algorithm” would be able to break RSA or ECC of any practical size in negligible time. In contrast, NTRU’s security is reduced only slightly by quantum computers. This has been validated by external reviewers such as the National Institute of Standards and Technology (NIST), who in a 2009 survey referenced NTRU as justification for the statement that “there are viable alternatives for both public key encryption and signatures that are not vulnerable to Shor’s Algorithm”.
+
+What business problem does NTRU solve?
+--------------------------------------
+We're providing a data protection solution that can help ensure long-term privacy of internet and financial transactions, something that has been compromised lately with RSA/ECC.    Industry needs a better and more transparent secure data communications solution, both now and in the future.  
+
+NTRU can improve communication efficiency while enhancing data security.  The most commonly used encryption solution (RSA) is painfully slow, especially with the larger keys that are required for acceptable security standards.   Rather than slow down data transmission, businesses today often choose to not protect all of their data.  
+
+NTRU on the other hand, provides much stronger security with substantially better performance.  Higher performing NTRU encryption requires fewer servers while still protecting (encrypting) all data.  If you are encrypting all transactions with a secure algorithm, the damage caused by intrusions can be significantly lessened.  Secure encryption reduces the chances of costly data breaches, improves privacy and compliance and saves money by reducing the need for some intrusion detection systems and other security solutions.
 
 What is NTRU's history and peer review?
 ---------------------------------------
 NTRU was invented in 1996 based on a completely different mathematical problems from RSA and Elliptic Curve called the “Approximate close lattice vector problem.”  It has been published, reviewed in scholarly journals, and presented at Crypto, Eurocrypt, RSA. The NTRU approach to lattice-based cryptography, which uses a particular type of lattice known as an “ideal lattice”, has been a catalyst for the development of other efficient lattice-based cryptographic primitives, most notably Gentry’s approach to fully homomorphic encryption.
 
+There have been more than 20 reports (https://securityinnovation.com/security-lab/crypto/402.-scrutiny-ntru-encrypt.html) issued regarding the NTRU algorithm over the past 16 years.  This research came from academic institutions, including Brown University, L’École normale supérieure (ENS), University of California San Diego, and Shanghai Jiaotong University.  This scrutiny has led to even stronger parameter choices and hardened implementations.  Now that NTRU is available under an open source license, the algorithm will receive even more testing.
+
 How fast is NTRU?
 -----------------
-At comparable cryptographic strength, NTRU performs the costly private key operations much faster than RSA. 
+At comparable cryptographic strength, NTRU performs private key operations 20x to 200x faster than openSSL RSA.  Faster means less processing time (cheaper) and offers the ability to encrypt more data (more secure).  In addition, as key sizes (security levels) increase by n, RSA's operations/second decrease at a rate of n3 whereas NTRU's decrease at n. A University of Leuven report states "NTRU is extremely fast on parallelizable processors."  Ari Juels, Chief Scientist, RSA Labs stated, "[NTRU] is considerably faster; that is something we acknowledge" 
 
     Security  NTRU Key Size     ECC   RSA     NTRU Ops/Sec.   ECC   RSA
     Level     Std.    Opt.       Key Size     Std.    Opt.     Ops/Sec.
@@ -54,7 +70,7 @@ At comparable cryptographic strength, NTRU performs the costly private key opera
     256	      12881	  8173	    512	  15360	  638     5000	  116	  1
     
 
-Much of the performance impact in SSL comes from the use of public key cryptography, which is used to initiate new sessions (session “handshakes”).  During session handshakes, the main public key activity consuming server resources is decryption of the session key provided by each client.  Performance increases in decryption have a significant impact on server performance. At current levels of activity, for a server using NTRU, the server time spent peforming public key cryptography will become negligible. CyaSSL+NTRU, a product that uses the algoritm runs 20x to 200x faster than openSSL RSA.
+Much of the performance impact in SSL comes from the use of public key cryptography, which is used to initiate new sessions (session “handshakes”).  During session handshakes, the main public key activity consuming server resources is decryption of the session key provided by each client.  Performance increases in decryption have a significant impact on server performance. At current levels of activity, for a server using NTRU, the server time spent peforming public key cryptography will become negligible.
 
 Has NTRU's speed been verified by third parties?
 ------------------------------------------------
@@ -62,12 +78,36 @@ Yes.  The Department of Electrical Engineering at the University of Leuven relea
 
 Has NTRU been standardized?
 ---------------------------
-Yes.  NTRU has been adopted in two standards.  By IEEE and the Financial industries X9 standards.
-(i) IEEE P1363 Working Group for Standards In Public Key Cryptography. This working group, active since 1992, has standardized many different techniques in public key cryptography. The standard IEEE Std 1363.1, issued in 2008, standardizes lattice-based public key cryptography, especially NTRUEncrypt. Other projects include or have included RSA, discrete log, elliptic curve discrete log, strong password-based techniques, and cryptography based on pairings.  IEEE 1363 Working Group Home Page
+NTRU has been adopted by two standards bodies, IEEE and the Financial Services Industry’s Accredited Standards Committee X9.
+a.	IEEE P1363 Working Group for Standards In Public Key Cryptography (http://grouper.ieee.org/groups/1363/lattPK/index.html). 
+b.	X9.98 Lattice-Based Polynomial Public Key Establishment Algorithm for the Financial Services Industry.    “This standard specifies the use of the NTRUEncrypt algorithm to establish secure communications for financial services. … X9.98 marks a particularly significant step forward in improving the robustness of systems based on X9 standards: it allows the deployment of systems that are protected against quantum computing attacks as well as against classical attacks.”
+
+Additionally, an Internet Draft standardizing NTRU-based ciphersuites in Transport Layer Security (TLS) is currently progressing through the Internet Engineering Task Force (IETF) 
 
 Is NTRU Patented?
 -----------------
 Yes. The patents will still be enforced but may be used under the GPL, i.e. under the condition that any work that uses them is also made available under the GPL. The patents and the code implementations are also available under standard commercial terms.
+
+Why has NTRU been open source licensed?
+---------------------------------------
+By offering NTRU source code and patents under the Gnu Public License (GPL) v2, we are intending to remove barriers to widespread deployment. We want to enable the developers of the open-source software that powers the internet to test, use, deploy, and start transitioning to fast, future-proof cryptography. Recent revelations and speculation about NSA influence on both crypto algorithms and crypto implementations have made it clear that the security community desperately needs alternatives to existing crypto solutions. 
+
+Making NTRU open-source also removes barriers to testing of both the algorithm and the implementation. Open scrutiny and testing is the only way to instill confidence in any encryption solution.  
+
+Furthermore, the open source licensing allows users to implement the NTRU algorithm in other languages and for other operating systems beyond those we currently support.
+
+Are there any commercial licenses available?
+--------------------------------------------
+For commercial (not open source) applications, Security Innovation offers a commercial license (see repository) that is not limited to use in open source applications only.
+
+Is replacing RSA with NTRU the best solution moving forward?
+------------------------------------------------------------
+We don’t think a single encryption solution is the best idea, regardless of the algorithm.  Double encryption using two fast algorithms such as NTRU plus another post-quantum crypto algorithm, or even ECC, would provide far greater security at a considerable higher performance than RSA alone today.  Our Chief Scientist, William Whyte, wrote a blog post on this subject.
+
+Doesn’t open sourcing make NTRU implementations more vulnerable to hackers?
+---------------------------------------------------------------------------
+On the contrary:  NTRU has been tested by several external groups in addition to the commercial implementations over the past 10 years.  By exposing it to even more users, the strength of the algorithm will be proven and the implementations will be strengthened.  Hiding behind a veil of patents and licensing does not equate to greater or lesser security.  The underlying strength of the algorithm is unaffected by the chosen licensing model.  In the event of any vulnerability being discovered in a particular implementation of the crypto algorithm, open source software allows users to build in short-term mitigation defenses to protect themselves until the vulnerability is fixed.  We feel this situation is better than leaving users exposed and unaware.
+
 
 Where can I get more technical information
 ------------------------------------------
