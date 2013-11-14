@@ -21,6 +21,8 @@ Security Innovation, Inc., the owner of the NTRU public key cryptography system,
 
 NTRU represents a significant improvement in the Public Key cryptography world—it’s faster, stronger and smaller than virtually any other system in use and it’s quantum computer resistant, making it the best choice for current projects with lifetimes that extend into the post quantum computer age.  
 
+"The open source licensing of the NTRU crypto system will make it even easier for wide-spread adoption of our X9.98 standard, allowing Financial Services companies to protect their important financial transactions",  said executive director Cynthia Fuller of Accredited Standards Committee X9 -Financial Industry Standards.   
+
 For additional overview information click https://www.securityinnovation.com/products/encryption-libraries/ntru-cryptography.html
 
 
