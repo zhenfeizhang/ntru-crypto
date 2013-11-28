@@ -1,6 +1,3 @@
-It's Here!
-==========
-
 ntru-crypto
 ===========
 
@@ -92,7 +89,7 @@ Yes. The patents will still be enforced but may be used under the GPL, i.e. unde
 
 Why has NTRU been open source licensed?
 ---------------------------------------
-By offering NTRU source code and patents under the Gnu Public License (GPL) v2, we are intending to remove barriers to widespread deployment. We want to enable the developers of the open-source software that powers the internet to test, use, deploy, and start transitioning to fast, future-proof cryptography. Recent revelations and speculation about NSA influence on both crypto algorithms and crypto implementations have made it clear that the security community desperately needs alternatives to existing crypto solutions. 
+By offering NTRU source code and patents under the Gnu Public License (GPL) v2 or higher, we are intending to remove barriers to widespread deployment. We want to enable the developers of the open-source software that powers the internet to test, use, deploy, and start transitioning to fast, future-proof cryptography. Recent revelations and speculation about NSA influence on both crypto algorithms and crypto implementations have made it clear that the security community desperately needs alternatives to existing crypto solutions. 
 
 Making NTRU open-source also removes barriers to testing of both the algorithm and the implementation. Open scrutiny and testing is the only way to instill confidence in any encryption solution.  
 
