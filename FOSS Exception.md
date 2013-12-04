@@ -273,9 +273,15 @@ FAQ
 ----
 
 *Q:* Are the NTRU patents covered under the FOSS exception
+
 *A:* Yes, the NTRU patents are covered by the FOSS exception 
+
 *Q:* What are the benefits of the FOSS license exception
-*A:* The FOSS License Exception permits use of the GPL-licensed patents and source code with software applications licensed under certain other FOSS licenses without causing the entire derivative work to be subject to the GPL.
+
+*A:* The FOSS License Exception permits use of the GPL-licensed patents and source code 
+with software applications licensed under certain other FOSS licenses without causing the entire derivative work to be subject to the GPL.
+
 *Q:* Is a commercial license still required for proprietary 'for resale' applications
+
 *A:* Yes, if you create a derivative work for resale that is not open source you must acquire a commercial license from Security Innovation
 
