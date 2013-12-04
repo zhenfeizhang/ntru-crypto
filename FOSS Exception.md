@@ -8,22 +8,29 @@ This Free and Open Source Software ("FOSS") License Exception allows developers 
 This FOSS License Exception, along with the GPL licensing of NTRU, is an irrevocable grant by Security Innovation, Inc. and cannot be withdrawn by Security Innovation, Inc, and/or any future owners of the Patented NTRU Algorithms.
 
 1. **Definitions.**
-"Derivative Work" means a derivative work, as defined under applicable copyright law, formed entirely from the GPLed NTRU and one or more FOSS Projects.
 
-"FOSS Project" means a free and open source software product distributed subject to a license listed in the section below titled "FOSS License List."
+    "Derivative Work" means a derivative work, as defined under applicable copyright law, formed entirely from the GPLed NTRU and one or more FOSS Projects.
 
-"FOSS Notice" means a notice placed by Security Innovation, Inc. in the NTRU Crypto Library Repository ("ntru-crypto") stating that NTRU may be distributed under Security Innovation's FOSS License Exception. As of December 4th 2013, this repository is hosted on github at https://github.com/NTRUOpenSourceProject/ntru-crypto
+    "FOSS Project" means a free and open source software product distributed subject to a license listed in the section below titled "FOSS License List."
 
-"Independent Work" means portions of the Derivative Work that are not derived from the GPLed NTRU and can reasonably be considered independent and separate works.
+    "FOSS Notice" means a notice placed by Security Innovation, Inc. in the NTRU Crypto Library Repository ("ntru-crypto") stating that NTRU may be distributed under Security Innovation's FOSS License Exception. As of December 4th 2013, this repository is hosted on github at https://github.com/NTRUOpenSourceProject/ntru-crypto
 
-"GPLed NTRU" means NTRU, distributed under the GPL v2 or higher.
+    "Independent Work" means portions of the Derivative Work that are not derived from the GPLed NTRU and can reasonably be considered independent and separate works.
+
+    "GPLed NTRU" means NTRU, distributed under the GPL v2 or higher.
 
 2.  **A FOSS Project developer ("you" or "your")** may distribute a Derivative Work provided that you and the Derivative Work meet all of the following conditions:
+
   a. You obey the GPL in all respects for the GPLed NTRU and all portions (including modifications) of the GPLed NTRU included in the Derivative Work (provided that this condition does not apply to Independent Works);
+  
   b. The Derivative Work does not include any work licensed under the GPL other than the GPLed NTRU;
+  
   c. You distribute Independent Works subject to a license listed in the section below titled "FOSS License List";
+  
   d. You distribute Independent Works in object code or executable form with the complete corresponding machine-readable source code on the same medium and under the same FOSS license applying to the object code or executable forms;
+  
   e. All works that are aggregated with the GPLed NTRU or the Derivative Work on a medium or volume of storage are not derivative works of the GPLed NTRU, Derivative Work or FOSS Project, and must reasonably be considered independent and separate works.
+  
   f. You distribute a copy of this FOSS License Exception with your Derivative Work.
 
 3. **Security Innovation, Inc. reserves all rights** not expressly granted in these terms and conditions. If all of the above conditions are not met, then this FOSS License Exception does not apply to you or your Derivative Work.
