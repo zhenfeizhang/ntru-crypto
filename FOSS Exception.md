@@ -5,7 +5,7 @@ What is the FOSS License Exception?
 ------------------------------------------
 This Free and Open Source Software ("FOSS") License Exception allows developers of FOSS Projects to include *Patented NTRU Algorithms and/or NTRU reference code ("NTRU")* with their FOSS Projects. NTRU is licensed pursuant to version 2 (or later) of the General Public License ("GPL"), or under commercial license. This exception permits distribution of NTRU, licensed under GPL, with a developer's FOSS Project licensed under the terms of another FOSS license listed below, even though such other FOSS license may be incompatible with the GPL.
 
-This FOSS License Exception, along with the GPL licensing of NTRU, is an irrevocable grant by Security Innovation, Inc. and cannot be withdrawn by any future owners of the Patented NTRU Algorithms.
+This FOSS License Exception, along with the GPL licensing of NTRU, is an irrevocable grant by Security Innovation, Inc. and cannot be withdrawn by Security Innovation, Inc, and/or any future owners of the Patented NTRU Algorithms.
 
 1. **Definitions.**
 "Derivative Work" means a derivative work, as defined under applicable copyright law, formed entirely from the GPLed NTRU and one or more FOSS Projects.
