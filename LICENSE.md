@@ -12,6 +12,7 @@ The GPLv2 license may also be found on the gnu.org website at:
 The GPL licensing of NTRU is an irrevocable grant by Security Innovation, Inc. and cannot be withdrawn by Security Innovation, Inc, and/or any future owners of the Patented NTRU Algorithms.
 
 This patent license applies to any program covered by this patent provided the program is released as specified above.
+
  
 FOSS Exception
 ================
