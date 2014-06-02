@@ -59,7 +59,7 @@ There have been more than 20 reports (https://securityinnovation.com/security-la
 
 How fast is NTRU?
 -----------------
-At comparable cryptographic strength, NTRU performs private key operations 20x to 200x faster than openSSL RSA.  Faster means less processing time (cheaper) and offers the ability to encrypt more data (more secure).  In addition, as key sizes (security levels) increase by n, RSA's operations/second decrease at a rate of n3 whereas NTRU's decrease at n. A University of Leuven (http://link.springer.com/chapter/10.1007%2F978-3-642-11925-5_6) report states "NTRU is extremely fast on parallelizable processors."  Ari Juels, Chief Scientist, RSA Labs stated, "[NTRU] is considerably faster; that is something we acknowledge" (http://www.networkworld.com/news/2011/042011-ntrue-algorithm-x9.html)
+At comparable cryptographic strength, NTRU performs private key operations 20x to 200x faster than openSSL RSA.  Faster means less processing time (cheaper) and offers the ability to encrypt more data (more secure).  In addition, as key sizes (security levels) increase by n, RSA's operations/second decrease at a rate of n3 whereas NTRU's decrease at n2. A University of Leuven (http://link.springer.com/chapter/10.1007%2F978-3-642-11925-5_6) report states "NTRU is extremely fast on parallelizable processors."  Ari Juels, Chief Scientist, RSA Labs stated, "[NTRU] is considerably faster; that is something we acknowledge" (http://www.networkworld.com/news/2011/042011-ntrue-algorithm-x9.html)
 
     Security  NTRU Key Size     ECC   RSA     NTRU Ops/Sec.   ECC   RSA
     Level     Std.    Opt.       Key Size     Std.    Opt.     Ops/Sec.
