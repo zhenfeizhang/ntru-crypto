@@ -1,8 +1,20 @@
-# Generated directories that can be ignored
+# Generated directories and files that can be ignored
 reference-code/C/src/obj/
 reference-code/C/sample/obj/
 reference-code/C/lib/
 reference-code/C/bin/
+
+reference-code/C/Encrypt/bin/
+reference-code/C/Encrypt/lib/
+reference-code/C/Encrypt/sample/obj/
+reference-code/C/Encrypt/src/obj/
+reference-code/C/Encrypt/test/obj/
+reference-code/C/Encrypt/ciphertext.bin
+reference-code/C/Encrypt/decoded-plaintext.bin
+reference-code/C/Encrypt/ntru-key.raw
+reference-code/C/Encrypt/ntru-pubkey.der
+reference-code/C/Encrypt/ntru-pubkey.raw
+reference-code/C/Encrypt/original-plaintext.bin
 
 # bash files that can be ignored
 *.bash_history
