@@ -7,7 +7,7 @@ NTRUENCRYPT_DIR = $(TOPDIR)/src
 UNAME := $(shell uname)
 
 # Flags.
-INCFLAGS = -I$(TOPDIR)/include -I$(NTRUENCRYPT_DIR)
+INCFLAGS = -I$(TOPDIR)/include
 CFLAGS   += -Wall -Wno-parentheses -Wshadow -fPIC $(INCFLAGS)
 
 ifeq ($(UNAME), Darwin)
@@ -24,7 +24,7 @@ sanity_objs  := $(addprefix $(OBJDIR)/, $(sanity_srcs:.c=.o))
 
 # Shared library files.
 ifeq ($(UNAME), Darwin)
-NTRUEncryptlib := $(LIBDIR)/libNTRUEncrypt.dynlib
+NTRUEncryptlib := $(LIBDIR)/libNTRUEncrypt.dylib
 else
 NTRUEncryptlib := $(LIBDIR)/libNTRUEncrypt.so
 endif
