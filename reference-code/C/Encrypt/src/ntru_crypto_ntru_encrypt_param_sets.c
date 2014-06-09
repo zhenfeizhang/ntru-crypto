@@ -40,6 +40,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES401EP1,              /* parameter-set id */
+        "ees401ep1",                 /* human readable param set name */
         {0x00, 0x02, 0x04},          /* OID */
         0x22,                        /* DER id */
         9,                           /* no. of bits in N (i.e., in an index) */
@@ -61,6 +62,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES449EP1,              /* parameter-set id */
+        "ees449ep1",                 /* human readable param set name */
         {0x00, 0x03, 0x03},          /* OID */
         0x23,                        /* DER id */
         9,                           /* no. of bits in N (i.e., in an index) */
@@ -82,6 +84,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES677EP1,              /* parameter-set id */
+        "ees677ep1",                 /* human readable param set name */
         {0x00, 0x05, 0x03},          /* OID */
         0x24,                        /* DER id */
         10,                          /* no. of bits in N (i.e., in an index) */
@@ -103,6 +106,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES1087EP2,             /* parameter-set id */
+        "ees1087ep2",                /* human readable param set name */
         {0x00, 0x06, 0x03},          /* OID */
         0x25,                        /* DER id */
         11,                          /* no. of bits in N (i.e., in an index) */
@@ -124,6 +128,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES541EP1,              /* parameter-set id */
+        "ees541ep1",                 /* human readable param set name */
         {0x00, 0x02, 0x05},          /* OID */
         0x26,                        /* DER id */
         10,                          /* no. of bits in N (i.e., in an index) */
@@ -145,6 +150,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES613EP1,              /* parameter-set id */
+        "ees613ep1",                 /* human readable param set name */
         {0x00, 0x03, 0x04},          /* OID */
         0x27,                        /* DER id */
         10,                          /* no. of bits in N (i.e., in an index) */
@@ -166,6 +172,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES887EP1,              /* parameter-set id */
+        "ees887ep1",                 /* human readable param set name */
         {0x00, 0x05, 0x04},          /* OID */
         0x28,                        /* DER id */
         10,                          /* no. of bits in N (i.e., in an index) */
@@ -187,6 +194,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES1171EP1,             /* parameter-set id */
+        "ees1171ep1",                /* human readable param set name */
         {0x00, 0x06, 0x04},          /* OID */
         0x29,                        /* DER id */
         11,                          /* no. of bits in N (i.e., in an index) */
@@ -208,6 +216,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES659EP1,              /* parameter-set id */
+        "ees659ep1",                 /* human readable param set name */
         {0x00, 0x02, 0x06},          /* OID */
         0x2a,                        /* DER id */
         10,                          /* no. of bits in N (i.e., in an index) */
@@ -229,6 +238,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES761EP1,              /* parameter-set id */
+        "ees761ep1",                 /* human readable param set name */
         {0x00, 0x03, 0x05},          /* OID */
         0x2b,                        /* DER id */
         10,                          /* no. of bits in N (i.e., in an index) */
@@ -250,6 +260,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES1087EP1,             /* parameter-set id */
+        "ees1087ep1",                /* human readable param set name */
         {0x00, 0x05, 0x05},          /* OID */
         0x2c,                        /* DER id */
         11,                          /* no. of bits in N (i.e., in an index) */
@@ -271,6 +282,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES1499EP1,             /* parameter-set id */
+        "ees1499ep1",                /* human readable param set name */
         {0x00, 0x06, 0x05},          /* OID */
         0x2d,                        /* DER id */
         11,                          /* no. of bits in N (i.e., in an index) */
@@ -292,6 +304,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES401EP2,              /* parameter-set id */
+        "ees401ep2",                 /* human readable param set name */
         {0x00, 0x02, 0x10},          /* OID */
         0x2e,                        /* DER id */
         9,                           /* no. of bits in N (i.e., in an index) */
@@ -303,7 +316,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         8 + (8 << 8) + (6 << 16),    /* df, dr */
         133,                         /* dg */
         60,                          /* maxMsgLenBytes */
-        136,                         /* m(1)_max */
+        101,                         /* dm0 */
         2005,                        /* 2^c - (2^c mod N) */
         11,                          /* c */
         1,                           /* lLen */
@@ -313,6 +326,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES439EP1,              /* parameter-set id */
+        "ees439ep1",                 /* human readable param set name */
         {0x00, 0x03, 0x10},          /* OID */
         0x2f,                        /* DER id */
         9,                           /* no. of bits in N (i.e., in an index) */
@@ -324,7 +338,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         9 + (8 << 8) + (5 << 16),    /* df, dr */
         146,                         /* dg */
         65,                          /* maxMsgLenBytes */
-        126,                         /* m(1)_max */
+        112,                         /* dm0 */
         439,                         /* 2^c - (2^c mod N) */
         9,                           /* c */
         1,                           /* lLen */
@@ -334,6 +348,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES593EP1,              /* parameter-set id */
+        "ees593ep1",                 /* human readable param set name */
         {0x00, 0x05, 0x10},          /* OID */
         0x30,                        /* DER id */
         10,                          /* no. of bits in N (i.e., in an index) */
@@ -345,7 +360,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10 + (10 << 8) + (8 << 16),  /* df, dr */
         197,                         /* dg */
         86,                          /* maxMsgLenBytes */
-        90,                          /* m(1)_max */
+        158,                         /* dm0 */
         1779,                        /* 2^c - (2^c mod N) */
         11,                          /* c */
         1,                           /* lLen */
@@ -355,6 +370,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
 
     {
         NTRU_EES743EP1,              /* parameter-set id */
+        "ees743ep1",                 /* human readable param set name */
         {0x00, 0x06, 0x10},          /* OID */
         0x31,                        /* DER id */
         10,                          /* no. of bits in N (i.e., in an index) */
@@ -366,7 +382,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         11 + (11 << 8) + (15 << 16), /* df, dr */
         247,                         /* dg */
         106,                         /* maxMsgLenBytes */
-        60,                          /* m(1)_max */
+        204,                         /* dm0 */
         8173,                        /* 2^c - (2^c mod N) */
         13,                          /* c */
         1,                           /* lLen */
@@ -462,3 +478,19 @@ ntru_encrypt_get_params_with_DER_id(
 }
 
 
+const char*
+ntru_encrypt_get_param_set_name(
+    NTRU_ENCRYPT_PARAM_SET_ID id)   /*  in - parameter-set id */
+{
+    size_t i;
+
+    for (i = 0; i < numParamSets; i++)
+    {
+        if (ntruParamSets[i].id == id)
+        {
+            return ntruParamSets[i].name;
+        }
+    }
+
+    return NULL;
+}
