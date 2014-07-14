@@ -22,6 +22,32 @@
  *
  *****************************************************************************/
  
+// Check windows
+#if _WIN32 || _WIN64
+   #if _WIN64
+     #define ENV64BIT
+  #else
+    #define ENV32BIT
+  #endif
+
+// Check GCC
+#elif __GNUC__
+  #if __x86_64__ || __ppc64__
+    #define ENV64BIT
+  #else
+    #define ENV32BIT
+  #endif
+
+#else
+    #define ENVUNKNOWN
+#endif
+
+#ifdef TEST_COMPARE_CONVOLUTIONS
+    #define ENV64BIT
+    #define ENV32BIT
+    #define ENVUNKNOWN
+#endif /* def TEST_COMPARE_CONVOLUTIONS */
+
 /******************************************************************************
  *
  * File: ntru_crypto_ntru_poly.c
@@ -34,6 +60,7 @@
 #include "ntru_crypto.h"
 #include "ntru_crypto_ntru_poly.h"
 #include "ntru_crypto_ntru_mgf1.h"
+
 
 
 /* ntru_gen_poly
@@ -87,10 +114,6 @@ ntru_gen_poly(
     uint8_t   left = 0;
     uint8_t   num_left = 0;
     uint32_t  retcode;
-    
-    ASSERT(seed);
-    ASSERT(buf);
-    ASSERT(indices);
 
     /* generate minimum MGF1 output */
 
@@ -100,7 +123,7 @@ ntru_gen_poly(
     {
         return retcode;
     }
-    
+
     octets = mgf_out;
     octets_available = min_calls * md_len;
 
@@ -257,6 +280,213 @@ ntru_poly_check_min_weight(
     return TRUE;
 }
 
+/* ntru_ring_mult_indices
+ *
+ * Multiplies ring element (polynomial) "a" by ring element (polynomial) "b"
+ * to produce ring element (polynomial) "c" in (Z/qZ)[X]/(X^N - 1).
+ * This is a convolution operation.
+ *
+ * Ring element "b" is a sparse trinary polynomial with coefficients -1, 0,
+ * and 1.  It is specified by a list, bi, of its nonzero indices containing
+ * indices for the bi_P1_len +1 coefficients followed by the indices for the
+ * bi_M1_len -1 coefficients.
+ * The indices are in the range [0,N).
+ *
+ * The result array "c" may share the same memory space as input array "a",
+ * input array "b", or temp array "t".
+ *
+ * This assumes q is 2^r where 8 < r < 16, so that overflow of the sum
+ * beyond 16 bits does not matter.
+ */
+
+#ifdef ENV64BIT
+
+void
+ntru_ring_mult_indices_quadruple_width_conv(
+    uint16_t const *a,          /*  in - pointer to ring element a */
+    uint16_t        bi_P1_len,  /*  in - no. of +1 coefficients in b */
+    uint16_t        bi_M1_len,  /*  in - no. of -1 coefficients in b */
+    uint16_t const *bi,         /*  in - pointer to the list of nonzero
+                                         indices of ring element b,
+                                         containing indices for the +1
+                                         coefficients followed by the
+                                         indices for -1 coefficients */
+    uint16_t        N,          /*  in - no. of coefficients in a, b, c */
+    uint16_t        q,          /*  in - large modulus */
+    uint16_t       *t,          /*  in - temp buffer of N elements */
+    uint16_t       *c)          /* out - address for polynomial c */
+{
+    uint16_t        i;
+    uint16_t        mod_q_mask;
+    uint64_t        full_mod_q_mask;
+    uint32_t        mask_interval;
+    uint16_t        iA, iT, iB; /* Loop variables for the relevant arrays */
+    uint16_t        mask_time;
+    uint16_t        oend[4];
+    uint16_t        end;
+    uint16_t const  Nmod4 = N & 3;
+
+    uint64_t        tmp1;
+    uint64_t        tmp2;
+
+    for(i=0; i<4; i++)
+    {
+      oend[i] = (N-i) & 0xfffc; /* 4 * floor((N-i)/4) */
+    }
+
+    mod_q_mask = q - 1;
+    full_mod_q_mask = (mod_q_mask << 16) | mod_q_mask;
+    full_mod_q_mask |= (full_mod_q_mask << 32);
+    mask_interval = ((1 << 16) / q);
+
+    /* t[(i+k)%N] = sum i=0 through N-1 of a[i], for b[k] = -1 */
+
+    mask_time = 0;
+
+    memset(t, 0, N*sizeof(uint16_t));
+    for (iB = bi_P1_len; iB < bi_P1_len + bi_M1_len; iB++)
+    {
+        /* first half -- from iT to N */
+        iT = bi[iB];
+        end = oend[iT & 3];
+
+        for (iA = 0; iT < end; iA+=4, iT+=4)
+        {
+            memcpy(&tmp1, t + iT, sizeof tmp1);
+            memcpy(&tmp2, a + iA, sizeof tmp2);
+            tmp1 += tmp2;
+            memcpy(t + iT, &tmp1, sizeof tmp1);
+        }
+
+        while (iT < N)
+        {
+            t[iT] += a[iA];
+            iT++;
+            iA++;
+        }
+
+        /* second half -- from 0 to start -1 */
+
+        /* at this point we have used (N-bi[iB + bi_P1_len]) and iA should be
+         * equal to bi[iB+bi_P1_len]+1.
+         */
+        end = oend[iA & 3];
+
+        for (iT = 0; iA < end; iA+=4, iT+=4)
+        {
+            memcpy(&tmp1, t + iT, sizeof tmp1);
+            memcpy(&tmp2, a + iA, sizeof tmp2);
+            tmp1 += tmp2;
+            memcpy(t + iT, &tmp1, sizeof tmp1);
+        }
+
+        while (iA < N)
+        {
+            t[iT] += a[iA];
+            iT++;
+            iA++;
+        }
+
+        mask_time++;
+        if (mask_time == mask_interval)
+        {
+            memcpy(&tmp1, t, sizeof tmp1);
+            tmp1 &= full_mod_q_mask;
+            memcpy(t, &tmp1, sizeof tmp1);
+
+            end = oend[Nmod4];
+            for (iT = Nmod4; iT < end; iT+=4)
+            {
+                memcpy(&tmp1, t + iT, sizeof tmp1);
+                tmp1 &= full_mod_q_mask;
+                memcpy(t + iT, &tmp1, sizeof tmp1);
+            }
+            mask_time = 0;
+        }
+    } /* for (iB = 0; iB < bi_M1_len; iB++) -- minus-index loop */
+
+    /* Minus everything */
+    for (iT = 0; iT < N; iT++)
+    {
+        t[iT] = -t[iT];
+        t[iT] &= mod_q_mask;
+    }
+    mask_time = 0;
+
+    for (iB = 0; iB < bi_P1_len; iB++)
+    {
+        /* first half -- from iT to N */
+        iT = bi[iB];
+        end = oend[iT & 3];
+
+        for (iA = 0; iT < end; iA+=4, iT+=4)
+        {
+            memcpy(&tmp1, t + iT, sizeof tmp1);
+            memcpy(&tmp2, a + iA, sizeof tmp1);
+            tmp1 += tmp2;
+            memcpy(t + iT, &tmp1, sizeof tmp1);
+        }
+
+        while (iT < N)
+        {
+            t[iT] += a[iA];
+            iT++;
+            iA++;
+        }
+
+        /* second half -- from 0 to start -1 */
+
+        /* at this point we have used (N-bi[iB + bi_P1_len]) and iA should be
+         * equal to bi[iB+bi_P1_len]+1.
+         */
+        end = oend[iA & 3];
+
+        for (iT = 0; iA < end; iA+=4, iT+=4)
+        {
+            memcpy(&tmp1, t + iT, sizeof tmp1);
+            memcpy(&tmp2, a + iA, sizeof tmp1);
+            tmp1 += tmp2;
+            memcpy(t + iT, &tmp1, sizeof tmp1);
+        }
+
+        while (iA < N)
+        {
+            t[iT] += a[iA];
+            iT++;
+            iA++;
+        }
+
+        mask_time++;
+        if (mask_time == mask_interval)
+        {
+            memcpy(&tmp1, t, sizeof tmp1);
+            tmp1 &= full_mod_q_mask;
+            memcpy(t, &tmp1, sizeof tmp1);
+
+            end = oend[Nmod4];
+            for (iT = Nmod4; iT < end; iT+=4)
+            {
+                memcpy(&tmp1, t + iT, sizeof tmp1);
+                tmp1 &= full_mod_q_mask;
+                memcpy(t + iT, &tmp1, sizeof tmp1);
+            }
+            mask_time = 0;
+        }
+
+    } /* for (iB = 0; iB < bi_P1_len; iB++) -- plus-index loop */
+
+    /* c = (a * b) mod q */
+    for (iT = 0; iT < N; iT++)
+    {
+        c[iT] = t[iT] & mod_q_mask;
+    }
+
+    return;
+}
+
+#endif  /* def ENV64BIT */
+
+
 
 /* ntru_ring_mult_indices
  *
@@ -277,8 +507,183 @@ ntru_poly_check_min_weight(
  * beyond 16 bits does not matter.
  */
 
+
+#ifdef ENV32BIT
 void
-ntru_ring_mult_indices(
+ntru_ring_mult_indices_double_width_conv(
+    uint16_t const *a,          /*  in - pointer to ring element a */
+    uint16_t        bi_P1_len,  /*  in - no. of +1 coefficients in b */
+    uint16_t        bi_M1_len,  /*  in - no. of -1 coefficients in b */
+    uint16_t const *bi,         /*  in - pointer to the list of nonzero
+                                         indices of ring element b,
+                                         containing indices for the +1
+                                         coefficients followed by the
+                                         indices for -1 coefficients */
+    uint16_t        N,          /*  in - no. of coefficients in a, b, c */
+    uint16_t        q,          /*  in - large modulus */
+    uint16_t       *t,          /*  in - temp buffer of N elements */
+    uint16_t       *c)          /* out - address for polynomial c */
+{
+    uint16_t        mod_q_mask;
+    uint32_t        mask_interval;
+    uint16_t        iA, iT, iB; /* Loop variables for the relevant arrays */
+    uint16_t        mask_time;
+    uint16_t        end;
+
+    uint32_t        tmp1;
+    uint32_t        tmp2;
+
+    end = N & 0xfffe; /* 4 * floor((N-i)/4) */
+
+    mod_q_mask = q - 1;
+    mask_interval = ((1 << 16) / q);
+    mask_time = 0;
+
+    /* t[(i+k)%N] = sum i=0 through N-1 of a[i], for b[k] = -1 */
+    memset(t, 0, N*sizeof(uint16_t));
+    for (iB = bi_P1_len; iB < bi_P1_len + bi_M1_len; iB++)
+    {
+        /* first half -- iT from bi[iB] to N
+                         iA from 0 to N - bi[iB] */
+        iT = bi[iB];
+
+        for (iA = 0; iT < end; iA+=2, iT+=2)
+        {
+            memcpy(&tmp1, t + iT, sizeof tmp1);
+            memcpy(&tmp2, a + iA, sizeof tmp2);
+            tmp1 += tmp2;
+            memcpy(t + iT, &tmp1, sizeof tmp1);
+        }
+
+        if (iT < N)
+        {
+            t[iT] += a[iA];
+            iT++;
+            iA++;
+        }
+
+        /* second half -- iT from 0 to bi[iB]
+                          iA from bi[iB] to N  */
+
+        for (iT = 0; iA < end; iA+=2, iT+=2)
+        {
+            memcpy(&tmp1, t + iT, sizeof tmp1);
+            memcpy(&tmp2, a + iA, sizeof tmp2);
+            tmp1 += tmp2;
+            memcpy(t + iT, &tmp1, sizeof tmp1);
+        }
+
+        if (iA < N)
+        {
+            t[iT] += a[iA];
+            iT++;
+            iA++;
+        }
+
+        mask_time++;
+        if (mask_time == mask_interval)
+        {
+            for (iT = 0; iT < N; iT++)
+            {
+              t[iT] &= mod_q_mask;
+            }
+            mask_time = 0;
+        }
+    } /* for (iB = 0; iB < bi_M1_len; iB++) -- minus-index loop */
+
+    /* Minus everything */
+    for (iT = 0; iT < N; iT++)
+    {
+        t[iT] = -t[iT];
+        t[iT] &= mod_q_mask;
+    }
+    mask_time = 0;
+
+    for (iB = 0; iB < bi_P1_len; iB++)
+    {
+        /* first half -- iT from bi[iB] to N
+                         iA from 0 to N - bi[iB] */
+        iT = bi[iB];
+
+        for (iA = 0; iT < end; iA+=2, iT+=2)
+        {
+          memcpy(&tmp1, t + iT, sizeof tmp1);
+          memcpy(&tmp2, a + iA, sizeof tmp2);
+          tmp1 += tmp2;
+          memcpy(t + iT, &tmp1, sizeof tmp1);
+        }
+
+        if (iT < N)
+        {
+            t[iT] += a[iA];
+            iT++;
+            iA++;
+        }
+
+        /* second half -- iT from 0 to bi[iB]
+                          iA from bi[iB] to N  */
+        for (iT = 0; iA < end; iA+=2, iT+=2)
+        {
+          memcpy(&tmp1, t + iT, sizeof tmp1);
+          memcpy(&tmp2, a + iA, sizeof tmp2);
+          tmp1 += tmp2;
+          memcpy(t + iT, &tmp1, sizeof tmp1);
+        }
+
+        if (iA < N)
+        {
+            t[iT] += a[iA];
+            iT++;
+            iA++;
+        }
+
+        mask_time++;
+        if (mask_time == mask_interval)
+        {
+            for (iT = 0; iT < N; iT++)
+            {
+              t[iT] &= mod_q_mask;
+            }
+            mask_time = 0;
+        }
+
+    } /* for (iB = 0; iB < bi_P1_len; iB++) -- plus-index loop */
+
+    /* c = (a * b) mod q */
+    for (iT = 0; iT < N; iT++)
+    {
+        c[iT] = t[iT] & mod_q_mask;
+    }
+
+    return;
+}
+#endif
+
+
+/* ntru_ring_mult_indices
+ *
+ * Multiplies ring element (polynomial) "a" by ring element (polynomial) "b"
+ * to produce ring element (polynomial) "c" in (Z/qZ)[X]/(X^N - 1).
+ * This is a convolution operation.
+ *
+ * Ring element "b" is a sparse trinary polynomial with coefficients -1, 0,
+ * and 1.  It is specified by a list, bi, of its nonzero indices containing
+ * indices for the bi_P1_len +1 coefficients followed by the indices for the
+ * bi_M1_len -1 coefficients.
+ * The indices are in the range [0,N).
+ *
+ * The result array "c" may share the same memory space as input array "a",
+ * input array "b", or temp array "t".
+ *
+ * This assumes q is 2^r where 8 < r < 16, so that overflow of the sum
+ * beyond 16 bits does not matter.
+ */
+
+
+#ifdef ENVUNKNOWN
+
+void
+ntru_ring_mult_indices_orig(
     uint16_t const *a,          /*  in - pointer to ring element a */
     uint16_t        bi_P1_len,  /*  in - no. of +1 coefficients in b */
     uint16_t        bi_M1_len,  /*  in - no. of -1 coefficients in b */
@@ -295,27 +700,22 @@ ntru_ring_mult_indices(
     uint16_t mod_q_mask = q - 1;
     uint16_t i, j, k;
 
-    ASSERT(a);
-    ASSERT(bi);
-    ASSERT(t);
-    ASSERT(c);
-
     /* t[(i+k)%N] = sum i=0 through N-1 of a[i], for b[k] = -1 */
 
     for (k = 0; k < N; k++)
     {
         t[k] = 0;
     }
-    
+
     for (j = bi_P1_len; j < bi_P1_len + bi_M1_len; j++)
     {
         k = bi[j];
-        
+
         for (i = 0; k < N; ++i, ++k)
         {
             t[k] = t[k] + a[i];
         }
-        
+
         for (k = 0; i < N; ++i, ++k)
         {
             t[k] = t[k] + a[i];
@@ -328,18 +728,18 @@ ntru_ring_mult_indices(
     {
         t[k] = -t[k];
     }
-    
+
     /* t[(i+k)%N] += sum i=0 through N-1 of a[i] for b[k] = +1 */
 
     for (j = 0; j < bi_P1_len; j++)
     {
         k = bi[j];
-        
+
         for (i = 0; k < N; ++i, ++k)
         {
             t[k] = t[k] + a[i];
         }
-        
+
         for (k = 0; i < N; ++i, ++k)
         {
             t[k] = t[k] + a[i];
@@ -352,9 +752,42 @@ ntru_ring_mult_indices(
     {
         c[k] = t[k] & mod_q_mask;
     }
-    
+
     return;
 }
+#endif   /* def ENVUNKNOWN */
+
+void
+ntru_ring_mult_indices(
+    uint16_t const *a,          /*  in - pointer to ring element a */
+    uint16_t        bi_P1_len,  /*  in - no. of +1 coefficients in b */
+    uint16_t        bi_M1_len,  /*  in - no. of -1 coefficients in b */
+    uint16_t const *bi,         /*  in - pointer to the list of nonzero
+                                         indices of ring element b,
+                                         containing indices for the +1
+                                         coefficients followed by the
+                                         indices for -1 coefficients */
+    uint16_t        N,          /*  in - no. of coefficients in a, b, c */
+    uint16_t        q,          /*  in - large modulus */
+    uint16_t       *t,          /*  in - temp buffer of N elements */
+    uint16_t       *c)          /* out - address for polynomial c */
+{
+#ifdef ENV64BIT
+    ntru_ring_mult_indices_quadruple_width_conv
+        (a, bi_P1_len, bi_M1_len, bi, N, q, t, c);
+    return;
+#endif
+#ifdef ENV32BIT
+    ntru_ring_mult_indices_double_width_conv
+        (a, bi_P1_len, bi_M1_len, bi, N, q, t, c);
+    return;
+#endif
+#ifdef ENVUNKNOWN
+    ntru_ring_mult_indices_orig (a, bi_P1_len, bi_M1_len, bi, N, q, t, c);
+    return;
+#endif
+}
+
 
 
 /* ntru_ring_mult_product_indices
@@ -398,11 +831,6 @@ ntru_ring_mult_product_indices(
     uint16_t  mod_q_mask = q - 1;
     uint16_t  i;
     
-    ASSERT(a);
-    ASSERT(bi);
-    ASSERT(t);
-    ASSERT(c);
-
     /* t2 = a * b1 */
 
     ntru_ring_mult_indices(a, b1i_len, b1i_len, bi, N, q, t, t2);
@@ -452,10 +880,6 @@ ntru_ring_mult_coefficients(
     uint16_t        mod_q_mask = q - 1;
     uint16_t        i, k;
     
-    ASSERT(a);
-    ASSERT(b);
-    ASSERT(c);
-
     /* c[k] = sum(a[i] * b[k-i]) mod q */
 
     memset(c, 0, N * sizeof(uint16_t));
@@ -485,17 +909,13 @@ ntru_ring_mult_coefficients(
 
 /* ntru_ring_inv
  *
- * Finds the inverse of a polynomial, a, in (Z/2^rZ)[X]/(X^N - 1).
- *
- * This assumes q is 2^r where 8 < r < 16, so that operations mod q can
- * wait until the end, and only 16-bit arrays need to be used.
- */
+ * Finds the inverse of a polynomial, a, in (Z/2Z)[X]/(X^N - 1).
+  */
 
 bool
 ntru_ring_inv(
     uint16_t       *a,          /*  in - pointer to polynomial a */
     uint16_t        N,          /*  in - no. of coefficients in a */
-    uint16_t        q,          /*  in - large modulus */
     uint16_t       *t,          /*  in - temp buffer of 2N elements */
     uint16_t       *a_inv)      /* out - address for polynomial a^-1 */
 {
@@ -505,7 +925,6 @@ ntru_ring_inv(
                                        with b, and b cannot be in a_inv */
     uint8_t  *f = c + N;
     uint8_t  *g = (uint8_t *)a_inv; /* g needs N + 1 bytes */
-    uint16_t *t2 = t + N;
     uint16_t  deg_b;
     uint16_t  deg_c;
     uint16_t  deg_f;
@@ -513,7 +932,7 @@ ntru_ring_inv(
     uint16_t  k = 0;
     uint16_t  i, j;
 
-    if (a == NULL || t == NULL || a_inv == NULL || (q & (q-1)))
+    if (a == NULL || t == NULL || a_inv == NULL)
     {
         return FALSE;
     }
@@ -653,27 +1072,16 @@ ntru_ring_inv(
         a_inv[j++] = (uint16_t)(b[i]);
     }
 
-    /* lift a^-1 in (Z/2Z)[X]/(X^N - 1) to a^-1 in (Z/qZ)[X]/(X^N -1) */
-
-    for (j = 0; j < 4; ++j)   /* assumes 256 < q <= 65536 */
-    {
-
-        /* a^-1 = a^-1 * (2 - a * a^-1) mod q */
-
-        memcpy(t2, a_inv, N * sizeof(uint16_t));
-        ntru_ring_mult_coefficients(a, t2, N, q, t);
-
-        for (i = 0; i < N; ++i)
-        {
-            t[i] = q - t[i];
-        }
-
-        t[0] = t[0] + 2;
-        ntru_ring_mult_coefficients(t2, t, N, q, a_inv);
-    }
-
     return TRUE;
-
 }
 
 
+#ifdef ENV64BIT
+    #undef ENV64BIT
+#endif
+#ifdef ENV32BIT
+    #undef ENV32BIT
+#endif
+#ifdef ENVUNKNOWN
+    #undef ENVUNKNOWN
+#endif
