@@ -9,6 +9,13 @@ UNAME := $(shell uname)
 vpath %.so $(LIBDIR)
 
 # Flags.
+
+ifeq ($(DEBUG), yes)
+CFLAGS?=-g
+else
+CFLAGS?=-O2 -funroll-loops -fomit-frame-pointer
+endif
+
 INCFLAGS = -I../include
 CFLAGS += -Wall -Wno-parentheses -Wshadow -fPIC $(INCFLAGS)
 
