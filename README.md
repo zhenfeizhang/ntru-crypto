@@ -113,4 +113,4 @@ With NTRU, there's a tradeoff to be made in terms of the parameter q. The larger
 
 Where can I get more technical information
 ------------------------------------------
-Go to https://www.securityinnovation.com/security-lab/crypto.html which is where we’ve collected a boatload of content on NTRU including NIST reports, the math and other very useful stuff.
+Go to https://www.securityinnovation.com/products/encryption-libraries/ntru-crypto/ntru-resources.html which is where we’ve collected a boatload of content on NTRU including NIST reports, the math and other very useful stuff.
