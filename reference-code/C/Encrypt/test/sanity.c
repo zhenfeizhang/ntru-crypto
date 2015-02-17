@@ -8,6 +8,7 @@
 #include <string.h>
 #include <time.h>
 #include "ntru_crypto.h"
+#include "ntru_crypto_drbg.h"
 
 /* For each parameter set:
  *    - Generate a key
@@ -18,7 +19,7 @@
  */
 
 #define RAND_LEN (4096)
-static void randombytes(uint8_t *x,uint64_t xlen)
+static uint32_t randombytes(uint8_t *x,uint64_t xlen)
 {
   static int fd = -1;
   int i;
@@ -43,8 +44,10 @@ static void randombytes(uint8_t *x,uint64_t xlen)
     x += i;
     xlen -= i;
   }
+  DRBG_RET(DRBG_OK);
 }
 
+#if 0
 static uint8_t
 get_entropy(
     ENTROPY_CMD  cmd,
@@ -85,6 +88,7 @@ get_entropy(
     }
     return 0;
 }
+#endif
 
 #define LOOPS 10000
 
@@ -106,7 +110,7 @@ main(int argc, char **argv)
     uint16_t plaintext_len;           /* no. of octets in plaintext */
     DRBG_HANDLE drbg;                 /* handle for instantiated DRBG */
     uint32_t rc;                      /* return code */
-    uint16_t drbg_strength;
+    //uint16_t drbg_strength;
     uint32_t loops;                   /* number of loops when benchmarking */
 
     clock_t clk;
@@ -142,9 +146,13 @@ main(int argc, char **argv)
       fprintf(stderr, "Testing parameter set %s... ", ntru_encrypt_get_param_set_name(param_set_id));
       fflush (stderr);
 
-      drbg_strength = 256;
-      rc = ntru_crypto_drbg_instantiate(drbg_strength, NULL, 0,
-                                        (ENTROPY_FN) &get_entropy, &drbg);
+      //drbg_strength = 256;
+
+      //rc = ntru_crypto_drbg_instantiate(drbg_strength, NULL, 0,
+      //                                  (ENTROPY_FN) &get_entropy, &drbg);
+      rc = ntru_crypto_external_drbg_instantiate(
+                                        (RANDOM_BYTES_FN) &randombytes, &drbg);
+
       if (rc != DRBG_OK)
       {
         fprintf(stderr,"\tError: An error occurred instantiating the DRBG\n");
@@ -166,11 +174,14 @@ main(int argc, char **argv)
       private_key = (uint8_t *)malloc(private_key_len * sizeof(uint8_t));
 
       clk = clock();
-      for (j = 0; j < loops/100 || j < 1; j++)
+      for (j = 0; j < loops/10 || j < 1; j++)
+      {
         rc = ntru_crypto_ntru_encrypt_keygen(drbg, param_set_id, &public_key_len,
                                            public_key,
                                            &private_key_len,
                                            private_key);
+        if (rc != NTRU_OK) break;
+      }
       clk = clock() - clk;
       if (rc != NTRU_OK)
       {
@@ -183,7 +194,7 @@ main(int argc, char **argv)
       }
 
       if (loops) {
-        fprintf(stderr, "kg %dus, ", (int)((1.0*clk)/(loops/100)));
+        fprintf(stderr, "kg %dus, ", (int)((1.0*clk)/(loops/10)));
         fflush (stderr);
       }
 
@@ -222,8 +233,11 @@ main(int argc, char **argv)
 
         clk = clock();
         for (j = 0; j < loops || j < 1; j++)
+        {
           rc = ntru_crypto_ntru_encrypt(drbg, public_key_len, public_key,
                 mlen, message, &ciphertext_len, ciphertext);
+          if(rc != NTRU_OK) break;
+        }
         clk = clock() - clk;
         if (rc != NTRU_OK){
           fprintf(stderr, "\tError: Encryption error %x\n", rc);
@@ -238,9 +252,12 @@ main(int argc, char **argv)
  
         clk = clock();
         for (j = 0; j < loops || j < 1; j++)
+        {
           rc = ntru_crypto_ntru_decrypt(private_key_len, private_key,
                 ciphertext_len, ciphertext,
                 &plaintext_len, plaintext);
+          if(rc != NTRU_OK) break;
+        }
         clk = clock() - clk;
         if (rc != NTRU_OK)
         {
