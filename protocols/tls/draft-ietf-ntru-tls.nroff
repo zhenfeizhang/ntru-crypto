@@ -838,7 +838,8 @@ Funding for the RFC Editor function is provided by the IETF Administrative Suppo
 
 .in 14
 .ti 3
-[EESS1]    SI, "NTRU standard", March 2015, <http://www.somewhere.com/>.
+[EESS1]    Consortium for Efficient Embedded Security, Efficient Embedded Security Standards
+EESS #1: Implementation Aspects of NTRUEncrypt. Available from github repository https://github.com/NTRUOpenSourceProject/ntru-crypto as doc/EESS1-2015v3.0.pdf
 
 .ti 3
 [FIPS180]  NIST, "Secure Hash Standard", FIPS 180-2, 2002.

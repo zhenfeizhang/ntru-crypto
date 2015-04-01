@@ -865,8 +865,11 @@ INTERNET DRAFT       Quantum-safe handshake for TLS           March 2015
 
 9.1.  Normative References
 
-   [EESS1]    SI, "NTRU standard", March 2015,
-              <http://www.somewhere.com/>.
+   [EESS1]    Consortium for Efficient Embedded Security, Efficient
+              Embedded Security Standards EESS #1: Implementation
+              Aspects of NTRUEncrypt. Available from github repository
+              https://github.com/NTRUOpenSourceProject/ntru-crypto as
+              doc/EESS1-2015v3.0.pdf
 
    [FIPS180]  NIST, "Secure Hash Standard", FIPS 180-2, 2002.
 
@@ -887,9 +890,6 @@ INTERNET DRAFT       Quantum-safe handshake for TLS           March 2015
 
    [RFC2246]  Dierks, T. and C. Allen, "The TLS Protocol Version 1.0",
               RFC 2246, January 1999.
-
-   [RFC2434]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
-              IANA Considerations Section in RFCs", RFC 2434, October
  
 
 
@@ -898,6 +898,8 @@ Schanck et al.           Expires <Expiry Date>                 [Page 16]
 INTERNET DRAFT       Quantum-safe handshake for TLS           March 2015
 
 
+   [RFC2434]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", RFC 2434, October
               1998.
 
    [RFC4346]  Dierks, T. and E. Rescorla, "The Transport Layer Security
@@ -927,8 +929,6 @@ INTERNET DRAFT       Quantum-safe handshake for TLS           March 2015
 
    [RFC5859]  Krawczyk, H., Eronen, P., "HMAC-based Extract-and-Expand
               Key Derivation Function (HKDF)", RFC 5859, May 2010.
-
-
 
 
 
