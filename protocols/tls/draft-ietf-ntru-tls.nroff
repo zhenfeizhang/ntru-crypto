@@ -1,0 +1,953 @@
+.pl 10.0i
+.po 0
+.ll 7.2i
+.lt 7.2i
+.nr LL 7.2i
+.nr LT 7.2i
+.ds LF Schanck et al. 
+.ds RF FORMFEED[Page %]
+.ds LH INTERNET DRAFT
+.ds RH March 2015
+.ds CH Quantum-safe handshake for TLS
+.ds CF Expires <Expiry Date>
+.hy 0
+.nh
+.ad l
+.in 0
+
+.nf
+.tl 'INTERNET-DRAFT''J. M. Schanck'
+.tl 'Intended Status: Experimental''Security Innovation & U. Waterloo'
+.tl 'Expires: <Expiry Date>''W. Whyte'
+.tl '''Security Innovation'
+.tl '''Z. Zhang'
+.tl '''Security Innovation'
+.tl '''March 2015'
+.fi
+
+.\" Note. The ".tl" directive is used to generate the leading header 
+.\" in Internet drafts. The information specified after ".tl" provides
+.\" left, center and right components of a line separated by the ' character
+.\" in the following manner:
+.\" 
+.\"  .tl '<left component>'<center component>'<right component>'
+.\"
+.\" Only the left and right components are used in Internet-draft headers
+.\" This and other comments in this template can safely be deleted.
+
+.ce 2
+Quantum-Safe Hybrid (QSH) Ciphersuite
+for Transport Layer Security (TLS)
+.fi
+.in 3
+
+
+.ti 0
+Abstract
+
+This document describes the Quantum-Safe Hybrid ciphersuite, a new cipher suite
+providing modular design for quantum-safe cryptography 
+to be adopted in the handshake for the Transport Layer Security (TLS) protocol.  
+In particular, it specifies the use of the NTRUEncrypt encryption scheme in a TLS handshake.
+
+
+
+
+.ti 0
+Status of This Memo
+
+[[This text will be provided by the RFC Editor.]]
+
+This memo defines an Experimental Protocol for the Internet
+community.  This memo does not specify an Internet standard of
+any kind.  Discussion and suggestions for improvement are
+requested.  Distribution of this memo is unlimited.
+
+
+.ti 0
+Copyright Notice
+
+[[This text will be provided by the RFC Editor.]]
+
+
+
+
+.bp
+.ti 0
+
+
+.\" \# TD4  -- Set TOC depth by altering this value (TD5 = depth 5)
+.\" \# TOC  -- Beginning of auto updated Table of Contents
+.in 0
+Table of Contents
+
+.nf
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+   2.  Modular design for quantum-safe hybrid handshake . . . . . . .  4
+   3.  Data Structures and Computations . . . . . . . . . . . . . . .  6
+     3.1.  Data structures for Quantum-safe Crypto Schemes  . . . . .  7
+     3.2.  Client Hello Extensions  . . . . . . . . . . . . . . . . .  8
+     3.3.  Server Hello Extension . . . . . . . . . . . . . . . . . . 10
+     3.4.  Server Key Exchange  . . . . . . . . . . . . . . . . . . . 11
+     3.5.  Client Key Exchange  . . . . . . . . . . . . . . . . . . . 13
+   4.  Cipher Suites  . . . . . . . . . . . . . . . . . . . . . . . . 14
+   5.  Specific information for Quantum Safe Scheme . . . . . . . . . 14
+     5.1   NTRUEncrypt  . . . . . . . . . . . . . . . . . . . . . . . 14
+     5.2.  LWE  . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+     5.3.  HFE  . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+   6.  Security Considerations  . . . . . . . . . . . . . . . . . . . 15
+     6.1.  Security, Authenticity and Forward Secrecy . . . . . . . . 15
+     6.2.  Quantum Security and Quantum Forward Secrecy . . . . . . . 15
+     6.3.  Quantum Authenticity . . . . . . . . . . . . . . . . . . . 15
+   7.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 16
+   8.  Acknowledgements . . . . . . . . . . . . . . . . . . . . . . . 16
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+     9.1.  Normative References . . . . . . . . . . . . . . . . . . . 16
+     8.2.  Informative References . . . . . . . . . . . . . . . . . . 17
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 18
+   Full Copyright Statement . . . . . . . . . . . . . . . . . . . . . 19
+   Intellectual Property  . . . . . . . . . . . . . . . . . . . . . . 19
+.fi
+.in 3
+
+.\" \# ETC -- End of auto updated Table of Contents
+
+.bp
+.ti 0
+1.  Introduction
+
+.fi
+Quantum computers pose a significant threat to modern cryptography.  
+Two most widely adopted public key 
+cryptosystems, namely, RSA [PKCS1] and Elliptic Curve Cryptography (ECC) [SECG], 
+will be broken by general purpose quantum computers.  
+RSA is adopted in TLS from Version 1.0 and to TLS Version 1.3
+[RFC2246], [RFC4346], [RFC5246], [TLS1.3].  
+ECC is enabled in RFC 4492 [RFC4492] and adopted in TLS version 1.2 [RFC5246] and version 1.3 [TLS1.3].  
+On the other hand, there exist several 
+quantum-safe cryptosystems, such as the
+NTRUEncrypt cryptosystem [EESS1],
+that deliver similar performance, yet are 
+conjectured to be robust against quantum computers.
+
+This document describes a modular design that allows one or many quantum-safe 
+cryptosystems to be adopted in the handshake protocol,
+applicable to TLS Version 
+1.0 to Version 1.3 [RFC2246], [RFC4346], [RFC5246], [TLS1.3].  
+It uses a hybrid approach that combines a classical handshake mechanism with
+key encapsulation mechanisms instantiated with 
+quantum-safe encryption schemes.  
+The modular design provides quantum-safe features to TLS with an introduction 
+of only one new cipher suite.  Yet, it allows the flexibility to include new
+and advanced quantum-safe encryption schemes at present and in the future.
+
+.in 3
+The remainder of this document is organized as follows.  
+Section 2 provides an overview of the modular design of quantum-safe handshake for TLS.  
+Section 3 specifies various data structures
+needed for a quantum safe handshake, their encoding in TLS messages, and the 
+processing of those messages.  
+Section 4 defines new TLS_QSH cipher suites.  
+Section 5 provides specific information for quantum safe encryption schemes.  
+Section 6 discusses security considerations.  
+Section 7 describes IANA considerations for the name spaces created by this document.  
+Section 8 gives acknowledgements.
+
+This is followed by the lists of normative and informative references cited in 
+this document, the authors' contact information, and statements on intellectual 
+property rights and copyrights.
+
+Implementation of this specification requires familiarity with TLS 
+[RFC2246], [RFC4346], [RFC5246], [TLS1.3], 
+TLS extensions [RFC4366], and knowledge of the corresponding quantum-safe 
+cryptosystem.
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", 
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be 
+interpreted as described in RFC 2119 [RFC2119]. 
+
+Well-known abbreviations and acronyms can be found at RFC Editor Abbreviations List
+[REAL]. 
+
+.ti 0
+2.  Modular design for quantum-safe hybrid handshake 
+
+This document introduces a modular approach to including new quantum-safe key exchange 
+algorithms within TLS, while maintaining the assurance that comes from the use of 
+already established cipher suites.  It allows the 
+TLS premaster secret to be agreed using both an established classical cipher suite and
+a quantum-safe key encapsulation mechanism. 
+
+.in 10
+.nf
+Client                                        Server 
+------                                        ------
+ClientHello          -------->
+                                         ServerHello
+                                        Certificate*
+                                  ServerKeyExchange*
+                                CertificateRequest*+
+                     <--------       ServerHelloDone
+Certificate*+
+ClientKeyExchange
+CertificateVerify*+
+[ChangeCipherSpec]
+Finished             -------->
+                                  [ChangeCipherSpec]
+                     <--------              Finished
+
+Application Data     <------->      Application Data
+
+.in 13
+* message is not sent under some conditions
++ message is not sent unless client authentication
+  is desired
+
+.ti 13
+Figure 1: Message flow in a full TLS handshake
+
+.fi
+.in 3
+Figure 1 shows all messages involved in the TLS key establishment protocol 
+(aka full handshake).  The addition of quantum-safe cryptography has direct 
+impact only on the ClientHello, the ServerHello, the ServerKeyExchange, and the 
+ClientKeyExchange.  In the rest of this document, we describe each quantum-safe key exchange data structure
+in greater detail in terms of the content and processing of these messages. 
+
+.fi
+.in 3
+The authentication is provided by classical cryptography.  The introduction of 
+quantum-safe encryption schemes delivers forward secrecy against quantum 
+attackers.  The additional cryptographic data exchanged between the client and the server is 
+shown in Figure 2.
+
+.bp
+.in 10
+.nf
+Client                                        Server 
+------                                        ------
+ClientHelloExtension
+(SerPKReq|
+QSHSchemeIDList|
+[CliPKList])         -------->
+                                ServerHelloExtension
+                                       ([SerPKList])
+                                   ServerKeyExchange
+                     <--------     ([SerCipherList])  
+ClientKeyExchange
+([CliCipherList])    -------->      
+
+ClassicS|SerS|CliS   <------->    ClassicS|SerS|CliS
+
+.in 13
+[struct]: struct is optional
+
+.ti 9
+Figure 2: Additional cryptographic data in TLS handshake
+.fi
+.in 3
+
+As usual, the ClientHello message includes the list of classical cipher suites the client wishes to 
+negotiate (e.g., TLS_ECDH_ECDSA_WITH_NULL_SHA), 
+as well as a new cipher suite identifier TLS_QSH (short for TLS with Quantum Safe Hybrid handshake).  
+This new identifier SHOULD appear first in the list of cipher suites. 
+
+The ClientHelloExtension field MAY have three additional fields: 
+.nf
+o   SerPKReq:  a request for server's public key; also indicates the 
+               number of server's public keys the client wishes to 
+               receive
+o   QSHSchemeIDList: 
+               a list of distinct QSHSchemeIDs from the client, 
+               each ID represents a quantum safe encryption
+               scheme/parameter set supported by the client
+o   CliPKList: a list of client's public keys [CPK1]|[CPK2]|...
+               each corresponding to a distinct QSHScheme in 
+               QSHSchemeIDList 
+.fi
+.in 3
+
+Note: The client does not need to provide public keys for all QSSchemes from the list.
+The client indicates that it does not wish to contribute a public key for 
+certain QSScheme by omitting the corresponding public key field.
+
+The ServerHelloExtension field MAY have one additional field:
+.nf
+o   SerPKList: a list of Server's public keys [SPK1]|[SPK2]|...
+               each corresponding to a QSHScheme in 
+               QSHSchemeIDList 
+.fi
+
+Note: SerPKList is a list of public key structures QSHPK.  
+For each structure, there is a QSHSchemeID field identifying the corresponding encryption scheme.  
+This QSHSchemeID MUST exist in QSHSchemeIDList. 
+
+The ServerKeyExchange message MAY contain an additional list of ciphertexts:
+.nf
+o   SerCipherList: 
+               a list of ciphertests 
+               [Encrypt_CPK1(SerS1)]|[Encrypt_CPK2(SerS2)]|...
+               where the server-contributed secret keying material 
+               is SerS = SerS1|SerS2|..., and CPKi is selected from 
+               CliPKList.
+.fi
+At least one of SerPKList and SerCipherList MUST have at least one entry.
+
+Additionally, the ServerKeyExchange contains an indication of the classical cipher suite selected, and the ServerKeyExchange material appropriate to that cipher suite.
+
+If SerPKList was provided, the ClientKeyExchange message MUST contain an additional 
+list of ciphertexts:
+.nf
+o   CliCipherList: 
+               a list of ciphertests 
+               [Encrypt_SPK1(CliS1)]|[Encrypt_SPK2(CliS2)]|...
+               where the client-contributed secret keying material 
+               is CliS = CliS1|CliS2|... , and SPKi is from 
+               SerPKList.
+.fi
+
+The client MUST use all public keys from SerPKList.
+
+Additionally, the ClientKeyExchange contains the ServerKeyExchange material 
+appropriate to the selected classical cipher suite.
+
+SerS and CliS cannot be both NULL.  
+
+The final premaster secret negotiated by the client and the server is the concatenation 
+of the classical premaster secret, SerS, and CliS in that order.
+./"The premaster secret is then used as defined by the classical 
+./"ciphersuite that the client and server have agreed on.
+A 48 bytes fixed length master secret is derived from the premaster secret at the end of the 
+handshake, using a pseudo random function specified by the classical cipher suite
+ (see Section 8.1. RFC 5246 [RFC5246]).  
+
+.ti 0
+3.  Data Structures and Computations
+
+This section specifies the data structures and computations used by TLS_QSH cipher suite specified in Sections 2.  
+The presentation language used here is the same as that used in TLS [RFC2246], [RFC4346], [RFC5246], [TLS1.3].  
+Since this specification extends TLS, these descriptions should be merged with those in the TLS specification and any others that extend TLS.  
+This means that enum types may not specify all possible values, 
+and structures with multiple formats chosen with a select() clause may not indicate all possible cases.
+
+.ti 0
+3.1.  Data structures for Quantum-safe Crypto Schemes
+
+.nf
+.in 8
+enum {
+    ntru_eess439 (0x0101), 
+    ntru_eess593 (0x0102), 
+    ntru_eess743 (0x0103),
+    reserved     (0x0102..0x01FF),
+    lwe_XXX      (0x0201),
+    reserved     (0x0202..0x02FF), 
+    hfe_XXX      (0x0301),
+    reserved     (0x0302..0x03FF),    
+    reserved     (0x0400..0xFEFF),
+    (0xFFFF)
+} QSHSchemeID;
+
+.fi
+.in 6
+.ti 3
+ntru_eess439, etc:   Indicates parameter set to be used for the NTRUEncrypt encryption scheme.  
+The name of the parameter sets defined here are those specified in [EESS1].  
+
+.ti 3
+lwe_XXX, etc:   Indicates parameters for Learning With Error (LWE) encryption scheme.  
+The name of the parameters defined here are \"those specified in [todo]. 
+not specified in this document.
+
+.ti 3
+hfe_XXX, etc:   Indicates parameters for Hidden Field Equotion (HFE) encryption scheme.  
+The name of the parameters defined here are \"those specified in [todo]. 
+not specified in this document.
+
+.in 3
+The QSHSchemes name space is maintained by IANA [IANA].  
+See Section 6 for information on how new schemes are added.
+
+The server implementation SHOULD support all of the above QSHSchemes, 
+and client implementation SHALL support at least one of them.
+
+.nf
+.in 8
+struct {
+    QSHSchemeID   id,
+    opaque        pubKey<1..2^16-1>
+} QSHPK;
+.fi
+
+.nf
+.in 8
+struct {
+    QSHPK         keys<1..2^24-1>
+} QSHPKList; 
+.fi
+
+.in 3
+The structure of public keys exchanged by the client and the server, namely, QSHPK, has two fields:
+QSHSchemeID specifies the corresponding quantum safe encryption scheme, and
+an opaque encodes the actual public key data following the specification of 
+the corresponding quantum safe encryption scheme.  
+Any entity that reserves a new quantum safe encryption scheme identifier 
+MUST specify how the keys and ciphertexts 
+for that scheme are encoded.  
+See Section 5 for definitions of the encodings of the schemes specified in this document.
+
+.in 3
+The QSHPKList is a list of QSHPKs.
+
+.nf
+.in 8
+struct {
+    QSHSchemeID   id,
+    opaque        encryptedKey<1..2^16-1>
+} QSHCipher;
+.fi
+
+.nf
+.in 8
+struct {
+    QSHCipher     encryptedKeys<1..2^24-1>
+} QSHCipherList;
+.fi
+
+.in 3
+The structure of ciphertext exchanged by the client and the server, namely QSHCipher, has two fields:
+QSHSchemeID specifies the corresponding quantum safe encryption scheme, and
+an opaque encodes the actual ciphertext following the specification of 
+the corresponding quantum safe encryption scheme.
+
+.in 3 
+The QSHCipherList is a list of ciphertexts.
+
+
+.ti 0
+3.2.  Client Hello Extensions
+
+This section specifies a TLS extension that can be included with the ClientHello 
+message as described in RFC 4366 [RFC4366].
+
+When these extensions are sent:
+
+The extensions MUST be sent along with any ClientHello message that proposes TLS_QSH cipher suites.
+
+Meaning of these extensions:
+
+These extensions allow a client to send a request for server's
+public key, a list that enumerates QSHSchemeIDs for supported quantum safe cryptosystems, 
+and/or public keys corresponding to QSHSchemeIDs. 
+
+Note: QSHSchemeID MUST be distinct in QSHSchemeIDList.  
+For each QSHSchemeID there MUST be at most one public key CPKi.
+
+Structure of the extension:
+
+The general structure of TLS extensions is described in [RFC4366], and this specification adds a new type to ExtensionType.
+
+.ti 7
+enum { quantum-safe-hybrid(0x18)} ExtensionType;
+
+.in 6
+.ti 3
+quantum-safe-hybrid (Supported TLS_QSH Extension): 
+Indicates the list of QSHSchemeIDs supported by the client.  
+For this extension, the opaque extension_data field may contain 
+SrvPkReq, QSHSchemeIDList and CliPKList.
+
+.fi
+.nf
+.in 8
+struct { 
+    select (CipherSuite) {
+        case TLS_QSH:
+            QSHSchemeIDList qshSchemeIDList,
+            QSHPKList       cliPKList,
+            SerPkReqType    serPkReq,
+} ClientHelloExtension;
+.fi
+.in 3
+
+SerPKReqType is defined as follows: 
+
+.fi
+.nf
+.in 8
+struct { 
+    int    min,
+    int    max
+} SerPkReqType;
+.fi
+
+.in 3
+serPKReq.min MUST not be greater than serPKReq.max.  
+Either field MUST not be greater than the maximum number that is supported by the protocol 
+(this may due to the size of the extensions and size of the encoded public keys, etc).  
+If the serPKReq.min equal serPKReq.max, the client requires specifically 
+serPKReq.min number of public keys.  
+When both field are zero, the client do not wish to receive any public keys. 
+When 0 <= serPKReq.min < serPKReq.max, the client lets the server to decide
+the number of public keys (between serPKReq.min and serPKReq.max). 
+
+.in 3
+Items in qshSchemeIDList are ordered according to the client's preferences (favorite choice first).
+
+As an example, a client that only supports ntru_eess439 (0x0101) and ntru_eess593 (0x0102) 
+and prefers to use ntru_eess439 would encode its qshSchemeIDList as follows:
+
+.ti 8
+04 01 01 01 02
+
+.fi
+.in 3
+The client MAY append a list of public keys corresponding to each crypto system.
+If serPKReq is (0,0), the client MUST list all public keys corresponding to each qshSchemeID form
+qshSchemeIDList.
+
+.in 8
+00 18 | extension length | 00 04 01 01 01 02 | CliPKList length | CPK1 | CPK2 | CPK3 | ... | 00 | 
+
+.in 3
+Note: the extension type value appearing in these examples is tentative.
+
+.ti 3
+Actions of the sender:
+
+.in 3
+A client that proposes TLS_QSH cipher suites in its ClientHello message appends these extensions (along with any others),
+indicating whether the client wishes the server to contribute its quantum-safe public key, 
+enumerating the supported quantum-safe crypto systems, and/or the public key corresponding to each crypto system.  
+
+.in 3
+Actions of the receiver:
+
+A server that receives a ClientHello with a TLS_QSH cipher suite MUST check the extension field
+to use the client's enumerated capabilities to guide its selection of an appropriate cipher suite.  
+The TLS_QSH cipher suite must be negotiated only if the server can 
+successfully complete the handshake while using the
+listed quantum-safe cryptosystems from the client.
+
+The server will carry out a classic handshake with the client using a classical cipher suite (other than TLS_QSH) indicated by the client.  
+The server will also select a (list of) supported QSHScheme(s), indexed by QSHSchemeID(s).  
+If server's public key(s) is required, the server will generate public/private keys corresponding to these QSHSchemeIDs.
+
+If a server does not understand the Extension, does not understand the list of quantum-safe encryption schemes, 
+or is unable to complete the TLS_QSH handshake while restricting itself to the enumerated cryptosystems, 
+it MUST NOT negotiate the use of a TLS_QSH cipher suite.   
+Depending on what other cipher suites are proposed by the client and supported by the server, 
+this may result in a fatal handshake failure alert due to the lack of common cipher suites.
+
+.ti 0
+3.3.  Server Hello Extension
+
+This section specifies a TLS extension that can be included with the ServerHello 
+message as described in RFC 4366 [RFC4366].
+
+When this extension is sent:
+
+The extensions MUST be sent along with any ServerHello message that accepts TLS_QSH cipher suites. 
+
+Meaning of this extension:
+
+This extension allows a server to notify the client the ID(s) and public key(s) 
+for the quantum-safe encryption scheme(s) it chooses from the QSHSchemeIDList. 
+
+Structure of this extension:
+
+.nf
+.in 8
+struct { 
+    select (CipherSuite) {
+        case TLS_QSH:
+            QSHPKList       serPKList
+} ServerHelloExtension;
+.fi
+.in 3
+
+Actions of the sender:
+
+.fi
+The server selects a number of QSHSchemeIDs in response to a ClientHelloExtension message.  
+The selection is based on client's preference and ReqSerPK field.  
+The QSHSchemeIDs selected MUST exist in the received QSHSchemeIDList.  
+For each scheme, 
+the server sets QSHPK.id to the QSHSchemeID that it selects.  
+If the server is willing/requested to contribute its public key,
+the server will generate a pair of public/private keys, 
+and set QSHPK.pubKey to this the public key;
+otherwise this field will be empty.  
+The server form the SerPKList with the list of QSHPK. 
+
+Note: if the server sends no public keys in the Server Hello Extension, 
+it MUST send at least one ciphertext in the EncryptedSerS at the Server Key Exchange message. 
+
+Actions of the receiver:
+
+A client that receives a ServerHello message containing an extension 
+will extract the agreed QSHSchemeIDs and the server's public keys from serPKList.  
+The client-generated secrets will be encrypted with server's ephemeral public keys as described in Section 3.5.
+
+.ti 0
+3.4.  Server Key Exchange
+
+When this message is sent:
+
+This message is sent in all implementations of this cipher suite.
+
+Meaning of this message:
+
+This message is used to send classical key exchange information to the client.  
+It MAY also be used to send key material (encrypted by one or many of the client's 
+public keys) to the client.
+
+.ti 3
+Structure of this message:
+
+The TLS ServerKeyExchange message is extended as follows.
+
+.nf
+.in 8
+struct {
+    select (KeyExchangeAlgorithm) {
+        case TLS_QSH: 
+            QSHCipherList     encryptedSerS,
+            CipherSuite       classical_ciphersuite,
+            ServerKeyExchange classical_exchange
+    } exchange_keys;
+} ServerKeyExchange;
+
+.ti 3
+Actions of the sender:
+
+.fi
+.in 3
+The server sets the CipherSuite field to the classical cipher suite.  
+This MUST be one of the next preferable cipher suites other than TLS_QSH that was received in the ClientHello.
+
+The server sets classical_exchange to have the contents appropriate for the indicated classical cipher suite.
+
+If a number of client's public keys CPK1,...CPKn were received in the Client Hello Extension, the server:
+
+.in 8
+1. Selects k<=n of these public keys.
+
+2. For each of the public keys CPKi, generates a secret SerSi.  The length in bytes
+of SerSi MUST be the lesser of (a) 48, the length of the classical master secret, 
+and (b) the maximum plaintext input length for 
+the corresponding encryption scheme (see Section 5).
+
+3. Encrypts the SerSi with PKi.
+
+4. Creates a QSHCipherList structure containing the encrypted secrets.
+
+.in 3
+Note: since it is required that each of the public keys in the ClientHelloExtension is for a distinct quantum-safe encryption scheme, 
+the QSHCipherList unambiguously identifies which client public key corresponds to which server-generated ciphertext.
+
+The server-contributed keying material is: 
+.in 8
+SerS = SerS1|SerS2|...|SerSk
+.in 3
+
+Actions of the receiver:
+
+The client processes the ServerKeyExchange with KeyExchangeAlgorithm as in a classical handshake.  
+If EncryptedSerS is not NULL, the client decrypts each ciphertext in encryptedSerS
+using the client's secret key identified by QSHIDs from SerPKList
+(received from ServerHelloExtension) and obtains SerS. 
+Otherwise, the client sets SerS to NULL.
+
+.ti 0
+3.5.  Client Key Exchange
+
+When this message is sent:
+
+This message is sent in all key exchange algorithms. 
+
+Meaning of the message:
+
+This message is used to convey ephemeral data relating to the 
+key exchange belonging to the client (such as its ephemeral ECDH public key).  
+It is also used to send client's quantum-safe keying material to the server.
+
+Structure of this message:
+
+The TLS ClientKeyExchange message is extended as follows.
+
+.nf
+.in 8
+struct {
+    select (KeyExchangeAlgorithm) {
+        case QSH: 
+            QSHcipher         encryptedCliS,
+            ClientKeyExchange classical_exchange
+    } exchange_keys;
+} ClientKeyExchange;
+
+.ti 3
+Actions of the sender:
+
+.fi
+.in 3
+The client sets classical_exchange to have the contents appropriate for the indicated classical cipher suite.
+
+If a number of server's public keys SPK1,...SPKk were received in the Server
+Hello Extension, the client:
+
+.in 8
+1. For each of the public keys SPKi, generates a secret CliSi. 
+The length in bytes of CliSi should be the lesser of (a) 48, the length 
+of the classical master secret, and (b) the maximum plaintext input length for 
+the corresponding encryption scheme (see Section 5).
+
+2. Encrypts the CliSi with SPKi.
+
+3. Creates a QSHCipherList structure containing the encrypted secrets.
+.in 3
+
+Note: since it is required that each of the public keys in the Client Hello Extension is for a distinct quantum-safe encryption scheme, 
+the QSHCipherList unambiguously identifies which server public key corresponds to which client-generated ciphertext.
+
+The client-contributed keying material is: 
+.in 8
+CliS = CliS1|CliS2|...|CliSk.
+.in 3
+
+
+The final premaster secret negotiated by the client and the server is the concatenation 
+of the classical premaster secret, SerS, and CliS in that order.
+A 48 bytes fixed length master secret is derived from the premaster secret at the end of the 
+handshake, using a pseudo random function specified by the classical cipher suite
+ (see Section 8.1. RFC 5246 [RFC5246]).  
+
+
+Actions of the receiver:
+
+The server processes the ClientKeyExchange with KeyExchangeAlgorithm as in a classical handshake.  
+If EncryptedCliS is received, the server decrypts the ciphertext(s) with
+the appropriate private secret key(s) and obtains CliS.  
+Otherwise, the server sets CliS to NULL.
+
+The final premaster secret negotiated by the client and the server is the concatenation 
+of the classical premaster secret, SerS, and CliS in that order.
+A 48 bytes fixed length master secret is derived from the premaster secret at the end of the 
+handshake, using a pseudo random function specified by the classical cipher suite
+ (see Section 8.1. RFC 5246 [RFC5246]).  
+
+.ti 0
+4.  Cipher Suites
+
+.nf
+.in 8
+CipherSuite TLS_QSH  = { 0xD0, 0x01 } \"[to be checked]
+.ne 3
+.fi
+.in 3
+
+Implementations that support this cipher suite MUST support at least one classical cipher suite.
+
+.ti 0
+5.  Specific information for Quantum Safe Scheme
+
+.ti 0
+5.1   NTRUEncrypt 
+
+NTRUEncrypt parameter sets are identified by the values ntru_eess439
+(0x0101), ntru_eess593 (0x0102), ntru_eess743 (0x0103) assigned in this
+document.
+
+For each of these parameter sets, the public key and ciphertext are Ring
+Elements as defined in [EESS1].  The encoded public key and ciphertext are
+the result of encoding the relevant Ring Element with RE2BSP as defined in
+[EESS1].
+
+For each parameter set the the maximum plaintext input length in bytes is as follows. This is used
+when determining the length of the client/server-generated secrets CliSi and SerSi as 
+specified in sections 3.4 and 3.5.
+
+.nf
+.in 8
+eess439  65
+eess593  86
+eess743  106
+.ne 3
+.fi
+
+.ti 0
+5.2.  LWE
+.in 3
+Encoding not defined in this document.
+
+.ti 0
+5.3.  HFE
+.in 3
+Encoding not defined in this document.
+
+.ti 0
+6.  Security Considerations
+
+.\"Security issues are discussed throughout this memo [todo: cite a paper we have not yet written].
+.ti 0
+6.1.  Security, Authenticity and Forward Secrecy
+
+Security, authenticity and forward secrecy against classical computers are inherent from classical handshake mechanism.
+
+.ti 0
+6.2.  Quantum Security and Quantum Forward Secrecy
+
+The proposed handshake mechanism provides quantum security and quantum forward secrecy.
+
+Quantum resistant feature of QSHSchemes ensures a quantum attacker will not learn SerS and/or CliS.  
+A quantum attacker may learn classic handshake information.  
+Given an input X, 
+the leftover hash lemma [LHL] ensures that one can extract Y bits that are almost uniformly distributed,
+where Y is asymptotic to the min-entropy of X. 
+An adversary who has some partial knowledge about X, will have almost no knowledge about Y.  
+This guarantees the attacker will not learn the final premaster secret so long as SerS and/or CliS
+have enough entropy and remain secret.  
+This also guarantees the premaster secret is secure even if the client's and/or the server's long term keys are compromised.
+
+.ti 0
+6.3.  Quantum Authenticity
+
+The proposed approach relies on the classical cipher suite for authenticity.  
+Thus, an attacker with quantum computing capability will be able to break the authenticity.
+
+.ti 0
+7.  IANA Considerations
+
+This document describes a new name spaces for use with the TLS protocol:
+
+o  QSHSchemeID
+ 
+Any additional assignments require IETF Consensus action [RFC2434].
+
+.ti 0
+8.  Acknowledgements
+
+Funding for the RFC Editor function is provided by the IETF Administrative Support Activity (IASA).
+
+
+.ti 0
+9.  References
+
+.ti 0
+9.1.  Normative References
+
+.in 14
+.ti 3
+[EESS1]    SI, "NTRU standard", March 2015, <http://www.somewhere.com/>.
+
+.ti 3
+[FIPS180]  NIST, "Secure Hash Standard", FIPS 180-2, 2002.
+
+.ti 3
+[FIPS186]  NIST, "Digital Signature Standard", FIPS 186-2, 2000.
+
+.ti 3
+[LHL]      Impagliazzo, R., Levin, L., and Luby, M., "Pseudo-random generation from one-way functions", 1989.
+
+.in 14
+.ti 3
+[PKCS1]    RSA Laboratories, "PKCS#1: RSA Encryption Standard version 1.5", PKCS 1, November 1993
+
+.in 14
+.ti 3
+[REAL]     "RFC Editor Abbreviations List", September 2013, <https://www.rfc-editor.org/rfc-style-guide/abbrev.expansion.txt/>.
+
+.in 14
+.ti 3
+[RFC2119]  Bradner, S., "Key Words for Use in RFCs to Indicate Requirement Levels", RFC 2119, March 1997.
+
+.in 14
+.ti 3
+[RFC2246]  Dierks, T. and C. Allen, "The TLS Protocol Version 1.0", 
+RFC 2246, January 1999.
+
+.in 14
+.ti 3
+[RFC2434]  Narten, T. and H. Alvestrand, "Guidelines for Writing an IANA Considerations Section in RFCs", RFC 2434, October 1998.
+
+.in 14
+.ti 3
+[RFC4346]  Dierks, T. and E. Rescorla, "The Transport Layer Security (TLS) Protocol Version 1.1", RFC 4346, April 2006.
+
+.in 14
+.ti 3
+[RFC4366]  Blake-Wilson, S., Nysrom, M., Hopwood, D., Mikkelsen, J., and T. Wright, "Transport Layer Security (TLS) Extensions", RFC 4366, April 2006.
+
+.in 14
+.ti 3
+[RFC4492]  Blake-Wilson, S., Bolyard, N., Gupta, V., Hawk, C., and B. Moeller, "Elliptic Curve Cryptography (ECC) Cipher Suites for Transport Layer Security (TLS)", RFC 4492, May 2006.
+
+.in 14
+.ti 3
+[RFC5246]  Dierks, T. and E. Rescorla, "The Transport Layer Security (TLS) Protocol Version 1.2", RFC 5246, August 2008.
+
+.in 14
+.ti 3
+[TLS1.3]   E. Rescorla, "The Transport Layer Security (TLS) Protocol Version 1.3", draft-ietf-tls-tls13-05, March 2015.
+
+
+.ti 0
+8.2.  Informative References
+
+.in 14
+.ti 3
+[RFC5990]  Randall, J., Kaliski, B., Brainard, J. and Turner S., "Use of the RSA-KEM Key Transport Algorithm in the Cryptographic Message Syntax (CMS)", RFC 5990, September 2010.
+
+.in 14
+.ti 3
+[RFC5859]  Krawczyk, H., Eronen, P., "HMAC-based Extract-and-Expand Key Derivation Function (HKDF)", RFC 5859, May 2010.
+
+.bp
+.ti 0
+Authors' Addresses
+
+.nf
+.in 3
+John M. Schanck
+Security Innovation, US 
+and 
+University of Waterloo, Canada
+jschanck@securityinnovation.com
+
+
+William Whyte
+Security Innovation, US 
+wwhyte@securityinnovation.com
+
+
+Zhenfei Zhang
+Security Innovation, US 
+zzhang@securityinnovation.com
+
+
+.bp
+.ti 0
+Full Copyright Statement
+
+[[This text will be provided by the RFC Editor.]]
+
+Copyright (C) The Internet Society (date).
+
+.fi
+This document is subject to the rights, licenses and restrictions contained in BCP 78, and except as set forth therein, the authors retain all their rights.
+
+This document and the information contained herein are provided on an "AS IS" basis and THE CONTRIBUTOR, THE ORGANIZATION HE/SHE REPRESENTS OR IS SPONSORED BY (IF ANY), THE INTERNET SOCIETY AND THE INTERNET ENGINEERING TASK FORCE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+
+.ti 0
+Intellectual Property
+
+[[This text will be provided by the RFC Editor.]]
+
+The IETF takes no position regarding the validity or scope of any Intellectual Property Rights or other rights that might be claimed to pertain to the implementation or use of the technology described in this document or the extent to which any license under such rights might or might not be available; nor does it represent that it has made any independent effort to identify any such rights.  Information on the procedures with respect to rights in RFC documents can be found in BCP 78 and BCP 79.
+
+Copies of IPR disclosures made to the IETF Secretariat and any assurances of licenses to be made available, or the result of an attempt made to obtain a general license or permission for the use of such proprietary rights by implementers or users of this specification can be obtained from the IETF on-line IPR repository at http://www.ietf.org/ipr.
+
+The IETF invites any interested party to bring to its attention any copyrights, patents or patent applications, or other proprietary rights that may cover technology that may be required to implement this standard.  Please address the information to the IETF at \%ietf-ipr@ietf.org.
+
+
+
