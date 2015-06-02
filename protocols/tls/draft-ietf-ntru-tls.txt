@@ -854,6 +854,13 @@ INTERNET DRAFT       Quantum-safe handshake for TLS           March 2015
    o  QSHSchemeID
 
    Any additional assignments require IETF Consensus action [RFC2434].
+   Process for determining whether a public key algorithm is in fact
+   quantum-safe, and therefore entitled to a QSHSchemeId, is not specified
+   in this document and may be established by the TLS working group as it
+   sees fit. For exmaple, TLS WG may require that algorithms are vetted in
+   some sense by CFRG or have been published in a standard by a recognised
+   international standards body such as IEEE or ANSI X9.
+   
 
 8.  Acknowledgements
 
