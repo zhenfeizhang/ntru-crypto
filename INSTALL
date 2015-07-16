@@ -1,0 +1,29 @@
+Installation Instructions
+=========================
+
+If you got the source from git run ./autogen.sh to finish
+setting up the autotools environment.
+
+Otherwise just run
+$ ./configure && make check
+
+Ensure that all of the tests completed successfully and
+install by running
+$ make install
+
+
+Optional Features
+=================
+
+Configure options:
+  --enable-simd
+      Build libntruencrypt with fast polynomial multiplication
+      routines. Requires a processor with SSSE3 instructions.
+  --enable-coverage
+      Link against libgcov and compile with the -coverage flag.
+      Requires CC=gcc, and lcov. Coverage results can subsequently
+      be gathered and analyzed by running:
+      $ make coverage-html
+  --disable-silent-rules
+      Verbose output during compilation.
+
