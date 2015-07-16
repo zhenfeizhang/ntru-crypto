@@ -129,7 +129,7 @@ main(void)
     uint16_t public_key_len;          /* no. of octets in public key */
     uint8_t private_key[607];         /* sized for EES401EP2 */
     uint16_t private_key_len;         /* no. of octets in private key */
-    uint8_t encoded_public_key[591];  /* sized for EES401EP2 */
+    uint8_t encoded_public_key[593];  /* sized for EES401EP2 */
     uint16_t encoded_public_key_len;  /* no. of octets in encoded public key */
     uint8_t ciphertext[552];          /* sized fof EES401EP2 */
     uint16_t ciphertext_len;          /* no. of octets in ciphertext */
@@ -208,7 +208,7 @@ main(void)
 
 
     /* Writing both private key and public key to files */  
-    Handle=fopen("ntru-key.raw","wb");
+    Handle=fopen("sample-ntru-key.raw","wb");
     if(Handle!=NULL)
     {
       printf("Writing private key to ntru-key.raw\n");
@@ -216,7 +216,7 @@ main(void)
       fclose(Handle);
     }
 
-    Handle=fopen("ntru-pubkey.raw","wb");
+    Handle=fopen("sample-ntru-pubkey.raw","wb");
     if(Handle!=NULL)
     {
       printf("Writing public key to ntru-pubkey.raw\n");
@@ -264,7 +264,7 @@ main(void)
     printf("DER encoded public key in hex:\n");
     DumpHex(encoded_public_key,encoded_public_key_len);
 
-    Handle=fopen("ntru-pubkey.der","wb");
+    Handle=fopen("sample-ntru-pubkey.der","wb");
     if(Handle!=NULL)
     {
       printf("Writing DER encoded public key to ntru-pubkey.der\n");
@@ -347,7 +347,7 @@ main(void)
      */
 
 
-    Handle=fopen("original-plaintext.bin","wb");
+    Handle=fopen("sample-original-plaintext.bin","wb");
     if(Handle!=NULL)
     {
       printf("Writing original plaintext to original-plaintext.bin\n");
@@ -370,7 +370,7 @@ main(void)
      printf("AES-128 key encrypted successfully.\n");
 
 
-    Handle=fopen("ciphertext.bin","wb");
+    Handle=fopen("sample-ciphertext.bin","wb");
     if(Handle!=NULL)
     {
       printf("Writing ciphertext to ciphertext.bin\n");
@@ -434,7 +434,7 @@ main(void)
     }
 
 
-    Handle=fopen("decoded-plaintext.bin","wb");
+    Handle=fopen("sample-decoded-plaintext.bin","wb");
     if(Handle!=NULL)
     {
       printf("Writing decoded plaintext to decoded-plaintext.bin\n");

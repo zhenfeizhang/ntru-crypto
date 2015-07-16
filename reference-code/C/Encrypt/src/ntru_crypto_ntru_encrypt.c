@@ -96,6 +96,8 @@ ntru_crypto_ntru_encrypt(
     uint32_t                dr1 = 0;
     uint32_t                dr2 = 0;
     uint32_t                dr3 = 0;
+    uint16_t                num_scratch_polys;
+    uint16_t                pad_deg;
     uint16_t                ring_mult_tmp_len;
     uint16_t               *scratch_buf = NULL;
     uint16_t               *ringel_buf = NULL;
@@ -172,23 +174,26 @@ ntru_crypto_ntru_encrypt(
 
     /* allocate memory for all operations */
 
+    ntru_ring_mult_indices_memreq(params->N, &num_scratch_polys, &pad_deg);
+
     if (params->is_product_form) {
-        ring_mult_tmp_len = params->N << 1; /* 2N 16-bit word buffer */
         dr1 =  params->dF_r & 0xff;
         dr2 = (params->dF_r >>  8) & 0xff;
         dr3 = (params->dF_r >> 16) & 0xff;
         dr = dr1 + dr2 + dr3;
+        num_scratch_polys += 1; /* mult_product_indices needs space for a
+                                   mult_indices and one intermediate result */
     }
     else
     {
-        ring_mult_tmp_len = params->N;      /* N 16-bit word buffer */
         dr = params->dF_r;
     }
-    
+    ring_mult_tmp_len = num_scratch_polys * pad_deg;
+
     scratch_buf_len = (ring_mult_tmp_len << 1) +
                                             /* X-byte temp buf for ring mult and
                                                 other intermediate results */
-                      (params->N << 1) +    /* 2N-byte buffer for ring elements
+                      (pad_deg << 1) +      /* 2N-byte buffer for ring elements
                                                 and overflow from temp buffer */
                       (dr << 2) +           /* buffer for r indices */
                       params->sec_strength_len;
@@ -198,9 +203,9 @@ ntru_crypto_ntru_encrypt(
     {
         NTRU_RET(NTRU_OUT_OF_MEMORY);
     }
-    
+
     ringel_buf = scratch_buf + ring_mult_tmp_len;
-    r_buf = ringel_buf + params->N;
+    r_buf = ringel_buf + pad_deg;
     b_buf = (uint8_t *)(r_buf + (dr << 1));
     tmp_buf = (uint8_t *)scratch_buf;
 
@@ -431,6 +436,8 @@ ntru_crypto_ntru_decrypt(
     uint32_t                dF_r1 = 0;
     uint32_t                dF_r2 = 0;
     uint32_t                dF_r3 = 0;
+    uint16_t                num_scratch_polys;
+    uint16_t                pad_deg;
     uint16_t                ring_mult_tmp_len;
     uint16_t               *scratch_buf = NULL;
     uint16_t               *ringel_buf1 = NULL;
@@ -517,24 +524,27 @@ ntru_crypto_ntru_decrypt(
 
     /* allocate memory for all operations */
 
+    ntru_ring_mult_indices_memreq(params->N, &num_scratch_polys, &pad_deg);
+
     if (params->is_product_form)
     {
-        ring_mult_tmp_len = params->N << 1; /* 2N 16-bit word buffer */
         dF_r1 =  params->dF_r & 0xff;
         dF_r2 = (params->dF_r >>  8) & 0xff;
         dF_r3 = (params->dF_r >> 16) & 0xff;
         dF_r = dF_r1 + dF_r2 + dF_r3;
+        num_scratch_polys += 1; /* mult_product_indices needs space for a
+                                   mult_indices and one intermediate result */
     }
     else
     {
-        ring_mult_tmp_len = params->N;      /* N 16-bit word buffer */
         dF_r = params->dF_r;
     }
+    ring_mult_tmp_len = num_scratch_polys * pad_deg;
 
     scratch_buf_len = (ring_mult_tmp_len << 1) +
                                             /* X-byte temp buf for ring mult and
                                                 other intermediate results */
-                      (params->N << 2) +    /* 2 2N-byte bufs for ring elements
+                      (pad_deg << 2) +      /* 2 2N-byte bufs for ring elements
                                                 and overflow from temp buffer */
                       (dF_r << 2) +         /* buffer for F, r indices */
                       params->m_len_max;    /* buffer for plaintext */
@@ -546,8 +556,8 @@ ntru_crypto_ntru_decrypt(
     }
 
     ringel_buf1 = scratch_buf + ring_mult_tmp_len;
-    ringel_buf2 = ringel_buf1 + params->N;
-    i_buf = ringel_buf2 + params->N;
+    ringel_buf2 = ringel_buf1 + pad_deg;
+    i_buf = ringel_buf2 + pad_deg;
     m_buf = (uint8_t *)(i_buf + (dF_r << 1));
     tmp_buf = (uint8_t *)scratch_buf;
     Mtrin_buf = (uint8_t *)ringel_buf1;
@@ -884,8 +894,9 @@ ntru_crypto_ntru_encrypt_keygen(
     uint32_t                dF1 = 0;
     uint32_t                dF2 = 0;
     uint32_t                dF3 = 0;
-    uint16_t                padN;
-    uint16_t                tmp_polys;
+    uint16_t                pad_deg;
+    uint16_t                total_polys;
+    uint16_t                num_scratch_polys;
     uint16_t               *scratch_buf = NULL;
     uint16_t               *ringel_buf1 = NULL;
     uint16_t               *ringel_buf2 = NULL;
@@ -943,38 +954,47 @@ ntru_crypto_ntru_encrypt_keygen(
         NTRU_RET(NTRU_BUFFER_TOO_SMALL);
     }
 
-    /* allocate memory for all operations:
-       6 (5 for product form) polynomials and 2*dF indices */
+    /* Allocate memory for all operations. We need:
+     *  - 2 polynomials for results: ringel_buf1 and ringel_buf2.
+     *  - scratch space for ntru_ring_mult_coefficients (which is
+     *    implementation dependent) plus one additional polynomial
+     *    of the same size for ntru_ring_lift_inv_pow2_x.
+     *  - 2*dF coefficients for F
+     */
+    ntru_ring_mult_coefficients_memreq(params->N, &num_scratch_polys, &pad_deg);
+    num_scratch_polys += 1; /* ntru_ring_lift_... */
 
+    total_polys = num_scratch_polys;
     if (params->is_product_form)
     {
         dF1 =  params->dF_r & 0xff;
         dF2 = (params->dF_r >> 8) & 0xff;
         dF3 = (params->dF_r >> 16) & 0xff;
         dF = dF1 + dF2 + dF3;
-
-        tmp_polys = 3;
+        /* For product form keys we can overlap ringel_buf1
+         * and the scratch space since mult. by f uses F_buf.
+         * so only add room for ringel_buf2 */
+        num_scratch_polys -= 1;
+        total_polys += 1;
     }
     else
     {
         dF = params->dF_r;
-
-        tmp_polys = 4; /* Need to store expanded value of f
-                          for non-product form Newton iteration */
+        total_polys += 2; /* ringel_buf{1,2} */
     }
 
-    padN = (params->N + 0x000f) & 0xfff0; /* Karatsuba degree */
-    scratch_buf_len = ((tmp_polys+2)*padN + 2*dF)*sizeof(uint16_t);
+    scratch_buf_len = total_polys * pad_deg * sizeof(uint16_t);
+    scratch_buf_len += 2 * dF * sizeof(uint16_t);
     scratch_buf = MALLOC(scratch_buf_len);
     if (!scratch_buf)
     {
         NTRU_RET(NTRU_OUT_OF_MEMORY);
     }
-
     memset(scratch_buf, 0, scratch_buf_len);
-    ringel_buf1 = scratch_buf + tmp_polys*padN;
-    ringel_buf2 = ringel_buf1 + padN;
-    F_buf       = ringel_buf2 + padN;
+
+    ringel_buf1 = scratch_buf + num_scratch_polys*pad_deg;
+    ringel_buf2 = ringel_buf1 + pad_deg;
+    F_buf       = ringel_buf2 + pad_deg;
     tmp_buf     = (uint8_t *)scratch_buf;
 
     /* set hash algorithm and seed length based on security strength */
@@ -1087,51 +1107,28 @@ ntru_crypto_ntru_encrypt_keygen(
 
         ringel_buf1[0] = (ringel_buf1[0] + 1) & mod_q_mask;
 
-        /* find f^-1 in (Z/qZ)[X]/(X^N - 1) */
+        /* find f^-1 in (Z/2Z)[X]/(X^N - 1) */
 
         if (!ntru_ring_inv(ringel_buf1, params->N, scratch_buf, ringel_buf2))
         {
-            result = NTRU_ERROR_BASE + NTRU_FAIL;
+            result = NTRU_RESULT(NTRU_FAIL);
         }
+    }
 
+    if (result == NTRU_OK)
+    {
         /* lift f^-1 in (Z/2Z)[X]/(X^N - 1) to f^-1 in (Z/qZ)[X]/(X^N -1) */
-        uint16_t *t = scratch_buf;
-        uint16_t *t2 = scratch_buf + padN;
-        uint16_t *f = ringel_buf1;
-        uint16_t *f_inv = ringel_buf2;
-        uint16_t j;
-        for (j = 0; j < 4; ++j)   /* assumes 256 < q <= 65536 */
+        if(params->is_product_form)
         {
-
-            /* f^-1 = f^-1 * (2 - f * f^-1) mod q */
-
-            if(params->is_product_form)
-            {
-                ntru_ring_mult_product_indices(f_inv, (uint16_t)dF1,
-                                               (uint16_t)dF2, (uint16_t)dF3,
-                                               F_buf, params->N, params->q,
-                                               t, t);
-                for (i = 0; i < params->N; ++i)
-                {
-                    t[i] = -((f_inv[i] + 3 * t[i]) & mod_q_mask);
-                }
-            }
-            else
-            {
-                ntru_ring_mult_coefficients(f, f_inv, params->N, padN, params->q, t, t);
-                for (i = 0; i < params->N; ++i)
-                {
-                    t[i] = -t[i];
-                }
-            }
-            t[0] = t[0] + 2;
-            memset(t+params->N, 0, (padN - params->N)*sizeof(uint16_t));
-
-            ntru_ring_mult_coefficients(f_inv, t, params->N, padN, params->q, t2, t2);
-
-            memcpy(f_inv, t2, params->N * sizeof(uint16_t));
+            result = ntru_ring_lift_inv_pow2_product(ringel_buf2,
+                    (uint16_t)dF1, (uint16_t)dF2, (uint16_t)dF3,
+                    F_buf, params->N, params->q, scratch_buf);
         }
-
+        else
+        {
+            result = ntru_ring_lift_inv_pow2_standard(ringel_buf2,
+                    ringel_buf1, params->N, params->q, scratch_buf);
+        }
     }
 
     if (result == NTRU_OK)
@@ -1178,17 +1175,16 @@ ntru_crypto_ntru_encrypt_keygen(
 
         /* create public key blob */
 
-        ntru_crypto_ntru_encrypt_key_create_pubkey_blob(params, ringel_buf2,
-                                                        pubkey_pack_type,
-                                                        pubkey_blob);
+        result = ntru_crypto_ntru_encrypt_key_create_pubkey_blob(params,
+                ringel_buf2, pubkey_pack_type, pubkey_blob);
         *pubkey_blob_len = public_key_blob_len;
+    }
 
+    if (result == NTRU_OK)
+    {
         /* create private key blob */
-
-        ntru_crypto_ntru_encrypt_key_create_privkey_blob(params, ringel_buf2,
-                                                         F_buf,
-                                                         privkey_pack_type,
-                                                         tmp_buf, privkey_blob);
+        result = ntru_crypto_ntru_encrypt_key_create_privkey_blob(params,
+                ringel_buf2, F_buf, privkey_pack_type, tmp_buf, privkey_blob);
         *privkey_blob_len = private_key_blob_len;
     }
 
@@ -1474,7 +1470,7 @@ ntru_crypto_ntru_encrypt_subjectPublicKeyInfo2PublicKey(
          * unknown OID by comparing the first 18 octets
          */
 
-        if (memcmp(prefix_buf, der_prefix_template, 18))
+        if (memcmp(prefix_buf, der_prefix_template, 18) == 0)
         {
             NTRU_RET(NTRU_OID_NOT_RECOGNIZED);
         }
@@ -1516,8 +1512,13 @@ ntru_crypto_ntru_encrypt_subjectPublicKeyInfo2PublicKey(
         NTRU_RET(NTRU_BAD_LENGTH);
     }
 
-    /* create the public-key blob */
+    /* check that the public key pack type is supported */
+    if(pubkey_pack_type != NTRU_ENCRYPT_KEY_PACKED_COEFFICIENTS)
+    {
+        NTRU_RET(NTRU_BAD_PUBLIC_KEY);
+    }
 
+    /* create the public-key blob */
     ntru_crypto_ntru_encrypt_key_recreate_pubkey_blob(params, packed_pubkey_len,
                                      data_ptr, pubkey_pack_type, pubkey_blob);
     *pubkey_blob_len = public_key_blob_len;
@@ -1526,7 +1527,7 @@ ntru_crypto_ntru_encrypt_subjectPublicKeyInfo2PublicKey(
     data_len -= packed_pubkey_len;
 
     /* check whether the buffer is empty and update *next */
-    if(*remaining_data_len > 0)
+    if(data_len > 0)
     {
         *next = data_ptr;
         *remaining_data_len = data_len;
