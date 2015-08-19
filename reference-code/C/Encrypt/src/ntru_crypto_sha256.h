@@ -31,8 +31,8 @@
  *
  *****************************************************************************/
 
-#ifndef CRYPTO_SHA256_H
-#define CRYPTO_SHA256_H
+#ifndef NTRU_CRYPTO_SHA256_H
+#define NTRU_CRYPTO_SHA256_H
 
 
 #include "ntru_crypto_platform.h"
@@ -53,10 +53,6 @@
 #define SHA_256_INIT_FN     &ntru_crypto_sha256_init   /* init function */
 #define SHA_256_UPDATE_FN   &ntru_crypto_sha256_update /* update function */
 #define SHA_256_FINAL_FN    &ntru_crypto_sha256_final  /* final function */
-#define SHA_256_FINAL_ZERO_PAD_FN                                           \
-                            &ntru_crypto_sha256_final_zero_pad
-                                                       /* final function using
-                                                          zero padding */
 #define SHA_256_DIGEST_FN   &ntru_crypto_sha256_digest /* digest function */
 
 
@@ -112,23 +108,6 @@ ntru_crypto_sha256_final(
     uint8_t              *md);      /*    out - address for message digest */
 
 
-/* ntru_crypto_sha256_final_zero_pad
- *
- * This routine completes the SHA-256 hash calculation using zero padding
- * and returns the message digest.
- * 
- * Returns SHA_OK on success.
- * Returns SHA_FAIL with corrupted context.
- * Returns SHA_BAD_PARAMETER if inappropriate NULL pointers are passed.
- * Returns SHA_OVERFLOW if more than 2^64 - 1 bytes are hashed.
- */
-
-extern uint32_t
-ntru_crypto_sha256_final_zero_pad(
-    NTRU_CRYPTO_SHA2_CTX *c,        /* in/out - pointer to SHA-2 context */
-    uint8_t              *md);      /*    out - address for message digest */
-
-
 /* ntru_crypto_sha256_digest
  *
  * This routine computes a SHA-256 message digest.
@@ -146,4 +125,4 @@ ntru_crypto_sha256_digest(
     uint8_t        *md);            // out - address for message digest
 
 
-#endif /* CRYPTO_SHA256_H */
+#endif /* NTRU_CRYPTO_SHA256_H */

@@ -70,7 +70,6 @@ typedef UINT64              uint64_t;
 #   include  <linux/string.h>
 #   define   MALLOC(size) (kmalloc(size, GFP_KERNEL))
 #   define   FREE(x) (kfree(x))
-#   define   ASSERT(positive_condition) BUG_ON(!(positive_condition))
 
 #else
 
@@ -79,7 +78,6 @@ typedef UINT64              uint64_t;
 #   include  <string.h>
 #   define   MALLOC(size) (malloc(size))
 #   define   FREE(x) (free(x))
-#   define   ASSERT(positive_condition) assert(positive_condition)
 
 #endif
 
@@ -96,35 +94,6 @@ typedef uint8_t bool;
 
 #ifndef FALSE
 #define FALSE   0
-#endif
-
-
-
-/* Check architecture. TODO: make the build-system handle this */
-#if defined(__SSSE3__)
-  #define NTRUENVSSE3
-/* x86-64 */
-#elif defined(__x86_64__) || defined(_M_X64)
-  #define NTRUENV64BIT
-/* i386 */
-#elif defined(__i386) || defined(_M_IX86)
-  #define NTRUENV32BIT
-/* ARM TODO: recognize 64 bit ARM chips */
-#elif defined(__ARMEL__)
-  #define NTRUENV32BIT
-/* PowerPC */
-#elif defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)
-#if defined(__powerpc64__) || defined(__ppc64__) || defined(__PPC64__) || \
-	defined(__64BIT__) || defined(_LP64) || defined(__LP64__)
-  #define NTRUENV64BIT
-#else
-  #define NTRUENV32BIT
-#endif
-/* Itanium */
-#elif defined(__ia64) || defined(__itanium__) || defined(_M_IA64)
-  #define NTRUENV64BIT
-#else
-  #define NTRUENVUNKNOWN
 #endif
 
 

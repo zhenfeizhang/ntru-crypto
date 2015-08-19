@@ -25,6 +25,4 @@ Commercial Licensing
 Parties who wish to distribute ntru-crypto, or components thereof, under licenses other
 than the GPL or the FOSS Exception must obtain a commercial license. Commercial licenses are available using flexible licensing terms on a one time per product fee or running royalty. 
 
-
-For details please ref
-The commercial license may also be found at the Security Innovation website (http://www.securityinnovation.com/NTRUlicense.doc)
+The standard commercial license may be found at the Security Innovation website (http://www.securityinnovation.com/NTRUlicense.doc)
