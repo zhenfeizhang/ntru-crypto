@@ -46,6 +46,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         9,                           /* no. of bits in N (i.e., in an index) */
         401,                         /* N */
         14,                          /* security strength in octets */
+        14,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -58,6 +59,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         32,                          /* min. no. of hash calls for IGF-2 */
         9,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA1, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -68,6 +71,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         9,                           /* no. of bits in N (i.e., in an index) */
         449,                         /* N */
         16,                          /* security strength in octets */
+        16,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -80,6 +84,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         31,                          /* min. no. of hash calls for IGF-2 */
         9,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA1, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -90,6 +96,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10,                          /* no. of bits in N (i.e., in an index) */
         677,                         /* N */
         24,                          /* security strength in octets */
+        24,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -102,6 +109,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         27,                          /* min. no. of hash calls for IGF-2 */
         9,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -112,6 +121,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         11,                          /* no. of bits in N (i.e., in an index) */
         1087,                        /* N */
         32,                          /* security strength in octets */
+        32,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -124,6 +134,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         25,                          /* min. no. of hash calls for IGF-2 */
         14,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -134,6 +146,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10,                          /* no. of bits in N (i.e., in an index) */
         541,                         /* N */
         14,                          /* security strength in octets */
+        14,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -146,6 +159,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         15,                          /* min. no. of hash calls for IGF-2 */
         11,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA1, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -156,6 +171,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10,                          /* no. of bits in N (i.e., in an index) */
         613,                         /* N */
         16,                          /* securuity strength in octets */
+        16,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -168,6 +184,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         16,                          /* min. no. of hash calls for IGF-2 */
         13,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA1, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -178,6 +196,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10,                          /* no. of bits in N (i.e., in an index) */
         887,                         /* N */
         24,                          /* security strength in octets */
+        24,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -190,6 +209,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         13,                          /* min. no. of hash calls for IGF-2 */
         12,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -200,6 +221,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         11,                          /* no. of bits in N (i.e., in an index) */
         1171,                        /* N */
         32,                          /* security strength in octets */
+        32,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -212,6 +234,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         20,                          /* min. no. of hash calls for IGF-2 */
         15,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -222,6 +246,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10,                          /* no. of bits in N (i.e., in an index) */
         659,                         /* N */
         14,                          /* security strength in octets */
+        14,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -234,6 +259,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         11,                          /* min. no. of hash calls for IGF-2 */
         14,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA1, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -244,6 +271,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10,                          /* no. of bits in N (i.e., in an index) */
         761,                         /* N */
         16,                          /* security strength in octets */
+        16,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -256,6 +284,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         13,                          /* min. no. of hash calls for IGF-2 */
         16,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA1, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -266,6 +296,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         11,                          /* no. of bits in N (i.e., in an index) */
         1087,                        /* N */
         24,                          /* security strength in octets */
+        24,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -278,6 +309,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         13,                          /* min. no. of hash calls for IGF-2 */
         14,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -288,6 +321,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         11,                          /* no. of bits in N (i.e., in an index) */
         1499,                        /* N */
         32,                          /* security strength in octets */
+        32,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         FALSE,                       /* product form */
@@ -300,6 +334,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         17,                          /* min. no. of hash calls for IGF-2 */
         19,                          /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -310,6 +346,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         9,                           /* no. of bits in N (i.e., in an index) */
         401,                         /* N */
         14,                          /* security strength in octets */
+        14,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         TRUE,                        /* product form */
@@ -322,6 +359,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         10,                          /* min. no. of hash calls for IGF-2 */
         6,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA1, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -332,6 +371,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         9,                           /* no. of bits in N (i.e., in an index) */
         439,                         /* N */
         16,                          /* security strength in octets */
+        16,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         TRUE,                        /* product form */
@@ -344,6 +384,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         15,                          /* min. no. of hash calls for IGF-2 */
         6,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA1, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -354,6 +396,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10,                          /* no. of bits in N (i.e., in an index) */
         593,                         /* N */
         24,                          /* security strength in octets */
+        24,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         TRUE,                        /* product form */
@@ -366,6 +409,8 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         12,                          /* min. no. of hash calls for IGF-2 */
         5,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
     {
@@ -376,6 +421,7 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         10,                          /* no. of bits in N (i.e., in an index) */
         743,                         /* N */
         32,                          /* security strength in octets */
+        32,                          /* no. of octets for random string b */
         2048,                        /* q */
         11,                          /* no. of bits in q (i.e., in a coeff) */
         TRUE,                        /* product form */
@@ -388,8 +434,59 @@ static NTRU_ENCRYPT_PARAM_SET ntruParamSets[] = {
         1,                           /* lLen */
         12,                          /* min. no. of hash calls for IGF-2 */
         7,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
     },
 
+    {
+        NTRU_EES443EP1,              /* parameter-set id */
+        "ees443ep1",                 /* human readable param set name */
+        {0x00, 0x03, 0x11},          /* OID */
+        0x32,                        /* DER id */
+        9,                           /* no. of bits in N (i.e., in an index) */
+        443,                         /* N */
+        16,                          /* security strength in octets */
+        32,                          /* no. of octets for random string b */
+        2048,                        /* q */
+        11,                          /* no. of bits in q (i.e., in a coeff) */
+        TRUE,                        /* product form */
+        9 + (8 << 8) + (5 << 16),    /* df, dr */
+        148,                         /* dg */
+        49,                          /* maxMsgLenBytes */
+        115,                         /* dm0 */
+        443,                         /* 2^c - (2^c mod N) */
+        9,                           /* c */
+        1,                           /* lLen */
+        8,                           /* min. no. of hash calls for IGF-2 */
+        5,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256, /* hash function for MGF-TP-1,
+                                        HMAC-DRBG, etc. */
+    },
+
+    {
+        NTRU_EES587EP1,              /* parameter-set id */
+        "ees587ep1",                 /* human readable param set name */
+        {0x00, 0x05, 0x11},          /* OID */
+        0x33,                        /* DER id */
+        10,                          /* no. of bits in N (i.e., in an index) */
+        587,                         /* N */
+        24,                          /* security strength in octets */
+        32,                          /* no. of octets for random string b  */
+        2048,                        /* q */
+        11,                          /* no. of bits in q (i.e., in a coeff) */
+        TRUE,                        /* product form */
+        10 + (10 << 8) + (8 << 16),  /* df, dr */
+        196,                         /* dg */
+        76,                          /* maxMsgLenBytes */
+        157,                         /* dm0 */
+        1761,                        /* 2^c - (2^c mod N) */
+        11,                          /* c */
+        1,                           /* lLen */
+        13,                          /* min. no. of hash calls for IGF-2 */
+        7,                           /* min. no. of hash calls for MGF-TP-1 */
+        NTRU_CRYPTO_HASH_ALGID_SHA256,  /* hash function for MGF-TP-1,
+                                           HMAC-DRBG, etc. */
+    },
 };
 
 static size_t numParamSets =
