@@ -1,0 +1,12 @@
+[submodule "reference-code/NTRUEncrypt"]
+	path = reference-code/NTRUEncrypt
+	url = git@github.com:NTRUOpenSourceProject/NTRUEncrypt.git
+[submodule "reference-code/NTRUEncrypt-java"]
+	path = reference-code/NTRUEncrypt-java
+	url = git@github.com:NTRUOpenSourceProject/NTRUEncrypt-java.git
+[submodule "reference-code/PASS"]
+	path = reference-code/PASS
+	url = git@github.com:NTRUOpenSourceProject/PASS.git
+[submodule "reference-code/NTRUMLS"]
+	path = reference-code/NTRUMLS
+	url = git@github.com:NTRUOpenSourceProject/NTRUMLS.git

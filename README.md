@@ -99,13 +99,16 @@ neighboring rights, to the extent allowed by law.
 
 The following patents are covered by the CC0 1.0 Public Domain Dedication:
 
-*Public key cryptosystem method and apparatus	6,081,597	Jun 27, 2000 08/914,449	
+**Invention	U.S. Patent No.	U.S. Issue Date	U.S. Application No.	
+U.S. Filing Date	Countries**
+
+* Public key cryptosystem method and apparatus	6,081,597	Jun 27, 2000 08/914,449	
 Aug 19, 1997	US, Japan, Canada, Australia, Israel, China, Europe
 
-*Ring-based public key cryptosystem method	6,298,137	Oct 2, 2001	09/543,708	
+* Ring-based public key cryptosystem method	6,298,137	Oct 2, 2001	09/543,708	
 Apr 5, 2000	US, Europe, Canada
 
-*Speed enhanced cryptographic method and apparatus 7,031,468 Apr 18, 2006	09/939,531	
+* Speed enhanced cryptographic method and apparatus 7,031,468 Apr 18, 2006	09/939,531	
 Aug 24, 2001	US, Europe, Canada
 
 For NTRUMLS and PASS, the patents will still be enforced but may be used under the GPL, 
