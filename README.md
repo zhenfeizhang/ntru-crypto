@@ -7,16 +7,24 @@ Key Contacts:
 
 * Dr. William Whyte
 * Dr. Mark Etzel
-* Mr. Peter Jenney
+
 
 
 Contacts may be reached by sending mail to ntru-crypto@securityinnovation.com
 
 Project Overview
 ================
-Security Innovation, Inc., the owner of the NTRU public key cryptography system, made the intellectual property and a sample implementation available under the Gnu Public License (GPL) in 2013 with the goal of enabling more widespread adoption of this superior cryptographic technology. The system is also available for commercial use under the terms of the Security Innovation Commercial License.
+The NTRU public key cryptography system consists of three component:
 
-NTRU represents a significant improvement in the Public Key cryptography world—it’s faster, stronger and smaller than virtually any other system in use and it’s quantum computer resistant, making it the best choice for current projects with lifetimes that extend into the post quantum computer age.  
+* The NTRUEncrypt public key encryption algorithm; 
+* The NTRUMLS digital signature scheme; and
+* The PASS digital signature scheme.
+
+Security Innovation, Inc., the owner of the NTRU public key cryptography system, made the intellectual property and a sample implementation of NTRUEncrypt available to the public domain in 2017 with the goal of enabling more widespread adoption of this superior cryptographic technology. 
+
+The NTRUMLS and PASS digital signature scheme is also available for commercial use under the terms of the Security Innovation Commercial License.
+
+The NTRU public key cryptography system represents a significant improvement in the Public Key cryptography world—it’s faster, stronger and smaller than virtually any other system in use and it’s quantum computer resistant, making it the best choice for current projects with lifetimes that extend into the post quantum computer age.  
 
 "The open source licensing of the NTRU crypto system will make it even easier for wide-spread adoption of our X9.98 standard, allowing Financial Services companies to protect their important financial transactions",  said executive director Cynthia Fuller of Accredited Standards Committee X9 -Financial Industry Standards.   
 
@@ -27,7 +35,7 @@ FAQ
 ===
 What is NTRU?
 -------------
-NTRU is a lattice-based public key cryptosystem from Security Innovation and the leading alternative to RSA and Elliptic Curve Cryptography (ECC) due to its higher performance and resistance to attacks from quantum computers.    NTRU was developed in 1996 as a visionary solution to cyber security challenges for the twenty-first century. NTRU is based on a mathematical problem called the “Approximate close lattice vector problem” and comprises three algorithms:  NTRUEncrypt, NTRUSign, and PASSSign.  It has been reviewed and published in scholarly journals and presented at Crypto, Eurocrypt, and RSA, and has been adopted in IEEE and X9 standards
+NTRU is a lattice-based public key cryptosystem from Security Innovation and the leading alternative to RSA and Elliptic Curve Cryptography (ECC) due to its higher performance and resistance to attacks from quantum computers.    NTRU was developed in 1996 as a visionary solution to cyber security challenges for the twenty-first century. NTRU is based on a mathematical problem called the “Approximate close lattice vector problem” and comprises three algorithms:  NTRUEncrypt, NTRUMLS, and PASS=.  It has been reviewed and published in scholarly journals and presented at Crypto, Eurocrypt, and RSA, and has been adopted in IEEE and X9 standards
 
 What makes NTRU fast?
 ---------------------
@@ -55,7 +63,7 @@ What is NTRU's history and peer review?
 ---------------------------------------
 NTRU was invented in 1996 based on a completely different mathematical problems from RSA and Elliptic Curve called the “Approximate close lattice vector problem.”  It has been published, reviewed in scholarly journals, and presented at Crypto, Eurocrypt, RSA. The NTRU approach to lattice-based cryptography, which uses a particular type of lattice known as an “ideal lattice”, has been a catalyst for the development of other efficient lattice-based cryptographic primitives, most notably Gentry’s approach to fully homomorphic encryption.
 
-There have been more than 20 reports (https://securityinnovation.com/security-lab/crypto/402.-scrutiny-ntru-encrypt.html) issued regarding the NTRU algorithm over the past 16 years.  This research came from academic institutions, including Brown University, L’École normale supérieure (ENS), University of California San Diego, and Shanghai Jiaotong University.  This scrutiny has led to even stronger parameter choices and hardened implementations.  Now that NTRU is available under an open source license, the algorithm will receive even more testing.
+There have been more than 20 reports (https://securityinnovation.com/security-lab/crypto/402.-scrutiny-ntru-encrypt.html) issued regarding the NTRU algorithm over the past 20 years.  This research came from academic institutions, including Brown University, L’École normale supérieure (ENS), University of California San Diego, and Shanghai Jiaotong University.  This scrutiny has led to even stronger parameter choices and hardened implementations.  Now that NTRU is available under an open source license, the algorithm will receive even more testing.
 
 How fast is NTRU?
 -----------------
@@ -85,25 +93,43 @@ Additionally, an Internet Draft standardizing NTRU-based ciphersuites in Transpo
 
 Is NTRU Patented?
 -----------------
-Yes. The patents will still be enforced but may be used under the GPL, i.e. under the condition that any work that uses them is also made available under the GPL. The patents and the code implementations are also available under standard commercial terms.
+SI has dedicated the work of NTRUEncrypt to the public domain by waiving all of its rights
+to the work worldwide under copyright law, including all related and
+neighboring rights, to the extent allowed by law.
+
+The following patents are covered by the CC0 1.0 Public Domain Dedication:
+
+*Public key cryptosystem method and apparatus	6,081,597	Jun 27, 2000 08/914,449	
+Aug 19, 1997	US, Japan, Canada, Australia, Israel, China, Europe
+
+*Ring-based public key cryptosystem method	6,298,137	Oct 2, 2001	09/543,708	
+Apr 5, 2000	US, Europe, Canada
+
+*Speed enhanced cryptographic method and apparatus 7,031,468 Apr 18, 2006	09/939,531	
+Aug 24, 2001	US, Europe, Canada
+
+For NTRUMLS and PASS, the patents will still be enforced but may be used under the GPL, 
+i.e. under the condition that any work that uses them is also made available under the GPL. 
+The patents and the code implementations are also available under standard commercial terms.
+
 
 Why has NTRU been open source licensed?
 ---------------------------------------
-By offering NTRU source code and patents under the Gnu Public License (GPL) v2 or higher, we are intending to remove barriers to widespread deployment. We want to enable the developers of the open-source software that powers the internet to test, use, deploy, and start transitioning to fast, future-proof cryptography. Recent revelations and speculation about NSA influence on both crypto algorithms and crypto implementations have made it clear that the security community desperately needs alternatives to existing crypto solutions. 
+By releasing NTRUEncrypt source code and patents to the public domain, we are intending to remove barriers to widespread deployment. We want to enable the developers of the open-source software that powers the internet to test, use, deploy, and start transitioning to fast, future-proof cryptography. Recent revelations and speculation about NSA influence on both crypto algorithms and crypto implementations have made it clear that the security community desperately needs alternatives to existing crypto solutions. 
 
-Making NTRU open-source also removes barriers to testing of both the algorithm and the implementation. Open scrutiny and testing is the only way to instill confidence in any encryption solution.  
+Making NTRUEncrypt public domain also removes barriers to testing of both the algorithm and the implementation. Open scrutiny and testing is the only way to instill confidence in any encryption solution.  
 
-Furthermore, the open source licensing allows users to implement the NTRU algorithm in other languages and for other operating systems beyond those we currently support.
+Furthermore, the open source licensing of NTRUMLS and PASS allows users to implement the NTRU algorithm in other languages and for other operating systems beyond those we currently support.
 
 Are there any commercial licenses available?
 --------------------------------------------
-For commercial (not open source) applications, Security Innovation offers a commercial license (see repository) that is not limited to use in open source applications only.
+For commercial (not open source) applications of NTRUMLS or PASS, Security Innovation offers a commercial license (see repository) that is not limited to use in open source applications only.
 
-Is replacing RSA with NTRU the best solution moving forward?
+Is replacing RSA with NTRUEncrypt the best solution moving forward?
 ------------------------------------------------------------
 We don’t think a single encryption solution is the best idea, regardless of the algorithm.  Double encryption using two fast algorithms such as NTRU plus another post-quantum crypto algorithm, or even ECC, would provide far greater security at a considerable higher performance than RSA alone today.  Our Chief Scientist, William Whyte, wrote a blog post on this subject. (http://blog.securityinnovation.com/blog/2013/08/king-rsa-cryptos-successor-why-we-need-to-move-away-from-a-monarchy.html)
 
-Doesn’t open sourcing make NTRU implementations more vulnerable to hackers?
+Doesn’t open sourcing make NTRUEncrypt implementations more vulnerable to hackers?
 ---------------------------------------------------------------------------
 On the contrary:  NTRU has been tested by several external groups in addition to the commercial implementations over the past 10 years.  By exposing it to even more users, the strength of the algorithm will be proven and the implementations will be strengthened.  Hiding behind a veil of patents and licensing does not equate to greater or lesser security.  The underlying strength of the algorithm is unaffected by the chosen licensing model.  In the event of any vulnerability being discovered in a particular implementation of the crypto algorithm, open source software allows users to build in short-term mitigation defenses to protect themselves until the vulnerability is fixed.  We feel this situation is better than leaving users exposed and unaware.
 
