@@ -1,4 +1,8 @@
-NTRUEncrypt Patent Licensing
+This repo consists of 4 submodules that are covered by different Patents
+with different licensing.
+=======================
+
+NTRUEncrypt and NTRUEncrypt-Java Patent Licensing
 =======================
 Security Innovation NTRU cryptographic software invention and reference source code for NTRUEncrypt
 are released to public domain under CCO 1.0 license. 
@@ -37,7 +41,7 @@ Commercial Licensing
 ====================
 Businesses and enterprises that wish to incorporate NTRU cryptography into proprietary appliances or other commercial software products for re-distribution must have a commercial license. Commercial licenses are available using flexible licensing terms on a one time per product fee or running royalty.  For details please refer to COMMERCIAL LICENSE.doc included in this distribution.
 
-NTRU Patents Covered under license
+NTRUMLS and PASS Patents Covered under license
 ===================================
 **Invention	U.S. Patent No.	U.S. Issue Date	U.S. Application No.	
 U.S. Filing Date	Countries**

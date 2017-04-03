@@ -53,12 +53,12 @@ Security Innovation, Inc. retains ownership and copyright to all code in the pro
 
 Make sure that any new source code or assets you introduce reference the project dual license text at the beginning of the file. If you are the author of a new file, preferred license text is:
 
-    /*******************************************************************************
-     * <<Module Name>>
-     * NTRU Cryptography Reference Source Code
-     * Copyright (c) 2009-2013, by Security Innovation, Inc. All rights reserved. 
-     *
-     * Redistribution and use in source and binary forms, with or without
+  /*******************************************************************************
+   * <<Module Name>>
+   * NTRU Cryptography Reference Source Code
+   * Copyright (c) 2009-2013, by Security Innovation, Inc. All rights reserved. 
+   *
+   * Redistribution and use in source and binary forms, with or without
 	 * modification, are permitted provided that the following conditions
 	 * are met:
 	 *
