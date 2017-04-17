@@ -28,7 +28,7 @@ The NTRU public key cryptography system represents a significant improvement in 
 
 "The open source licensing of the NTRU crypto system will make it even easier for wide-spread adoption of our X9.98 standard, allowing Financial Services companies to protect their important financial transactions",  said executive director Cynthia Fuller of Accredited Standards Committee X9 -Financial Industry Standards.   
 
-For additional overview information click https://www.securityinnovation.com/products/encryption-libraries/ntru-cryptography.html
+[An overview of additional information can be found here](https://www.onboardsecurity.com/products/ntru-crypto)
 
 
 FAQ
@@ -49,7 +49,7 @@ These applications include Payment Systems,  secure messaging and email, mobile 
 
 What makes NTRU quantum computing resistant?
 --------------------------------------------
-NTRU is currently not known to be vulnerable to algorithms based on quantum computers, unlike RSA or its other challenger, Elliptic Curve Cryptography. A working, full-scale quantum computer running the process known as “Shor’s algorithm” would be able to break RSA or ECC of any practical size in negligible time. In contrast, NTRU’s security is reduced only slightly by quantum computers. This has been validated by external reviewers such as the National Institute of Standards and Technology (NIST), who in a 2009 survey referenced NTRU as justification for the statement that “there are viable alternatives for both public key encryption and signatures that are not vulnerable to Shor’s Algorithm”.
+NTRU is currently not known to be vulnerable to algorithms based on quantum computers, unlike RSA or its other challenger, Elliptic Curve Cryptography. A working, full-scale quantum computer running the process known as “Shor’s algorithm” would be able to break RSA or ECC of any practical size in negligible time. In contrast, NTRU’s security is reduced only slightly by quantum computers. This has been validated by external reviewers such as the National Institute of Standards and Technology (NIST), who in a [2009 survey](http://ws680.nist.gov/publication/get_pdf.cfm?pub_id=901595) referenced NTRU as justification for the statement that “there are viable alternatives for both public key encryption and signatures that are not vulnerable to Shor’s Algorithm”.
 
 What business problem does NTRU solve?
 --------------------------------------
@@ -63,13 +63,14 @@ What is NTRU's history and peer review?
 ---------------------------------------
 NTRU was invented in 1996 based on a completely different mathematical problems from RSA and Elliptic Curve called the “Approximate close lattice vector problem.”  It has been published, reviewed in scholarly journals, and presented at Crypto, Eurocrypt, RSA. The NTRU approach to lattice-based cryptography, which uses a particular type of lattice known as an “ideal lattice”, has been a catalyst for the development of other efficient lattice-based cryptographic primitives, most notably Gentry’s approach to fully homomorphic encryption.
 
-There have been more than 20 reports (https://securityinnovation.com/security-lab/crypto/402.-scrutiny-ntru-encrypt.html) issued regarding the NTRU algorithm over the past 20 years.  This research came from academic institutions, including Brown University, L’École normale supérieure (ENS), University of California San Diego, and Shanghai Jiaotong University.  This scrutiny has led to even stronger parameter choices and hardened implementations.  Now that NTRU is available under an open source license, the algorithm will receive even more testing.
+
+There have been more than [20 reports](https://www.onboardsecurity.com/products/ntru-crypto/ntru-resources) and [numerous research papers](https://www.onboardsecurity.com/products/ntru-crypto/ntru-scrutiny) issued regarding the NTRU algorithm over the past 16 years.  This research came from academic institutions, including Brown University, L’École normale supérieure (ENS), University of California San Diego, and Shanghai Jiaotong University.  This scrutiny has led to even stronger parameter choices and hardened implementations.  Now that NTRU is available under an open source license, the algorithm will receive even more testing.
 
 How fast is NTRU?
 -----------------
-At comparable cryptographic strength, NTRU performs private key operations 20x to 200x faster than openSSL RSA.  Faster means less processing time (cheaper) and offers the ability to encrypt more data (more secure).  In addition, as key sizes (security levels) increase by n, RSA's operations/second decrease at a rate of n3 whereas NTRU's decrease at n2. A University of Leuven (http://link.springer.com/chapter/10.1007%2F978-3-642-11925-5_6) report states "NTRU is extremely fast on parallelizable processors."  Ari Juels, Chief Scientist, RSA Labs stated, "[NTRU] is considerably faster; that is something we acknowledge" (http://www.networkworld.com/news/2011/042011-ntrue-algorithm-x9.html)
+At comparable cryptographic strength, NTRU performs private key operations 20x to 200x faster than openSSL RSA.  Faster means less processing time (cheaper) and offers the ability to encrypt more data (more secure).  In addition, as key sizes (security levels) increase by n, RSA's operations/second decrease at a rate of n3 whereas NTRU's decrease at n2. A University of Leuven publication titled "[Speed Records for NTRU](http://link.springer.com/chapter/10.1007%2F978-3-642-11925-5_6)" states that "NTRU is extremely fast on parallelizable processors."  Ari Juels, Chief Scientist, RSA Labs stated, "[[NTRU] is considerably faster; that is something we acknowledge](http://www.networkworld.com/article/2202326/security/meet-the-fastest-public-key-algorithm-few-have-even-heard-of.html)"
 
-    Security  NTRU Key Size     ECC   RSA     NTRU Ops/Sec.   ECC   RSA
+    Security  NTRU Key Size     ECC   RSA     NTRU Ops/Sec.   ECC     RSA
     Level     Std.    Opt.       Key Size     Std.    Opt.     Ops/Sec.
     112       5951	  4411	    224	  2048	  2284	  10638	  951	  156
     128	      6743	  4829	    256	  4096	  1896	  9901	  650	  12
@@ -81,15 +82,15 @@ Much of the performance impact in SSL comes from the use of public key cryptogra
 
 Has NTRU's speed been verified by third parties?
 ------------------------------------------------
-Yes.  The Department of Electrical Engineering at the University of Leuven released a report entitled Speed records for NTRU. in which they write: "NTRU is extremely fast on parallelizable processors."
+Yes.  The Department of Electrical Engineering at the University of Leuven released a report entitled [Speed records for NTRU](http://link.springer.com/chapter/10.1007%2F978-3-642-11925-5_6). in which they write: "NTRU is extremely fast on parallelizable processors."
 
 Has NTRU been standardized?
 ---------------------------
 NTRU has been adopted by two standards bodies, IEEE and the Financial Services Industry’s Accredited Standards Committee X9.
-a.	IEEE P1363 Working Group for Standards In Public Key Cryptography (http://grouper.ieee.org/groups/1363/lattPK/index.html). 
+a.	[IEEE P1363 Working Group for Standards In Public Key Cryptography](http://grouper.ieee.org/groups/1363/lattPK/index.html). 
 b.	X9.98 Lattice-Based Polynomial Public Key Establishment Algorithm for the Financial Services Industry.    “This standard specifies the use of the NTRUEncrypt algorithm to establish secure communications for financial services. … X9.98 marks a particularly significant step forward in improving the robustness of systems based on X9 standards: it allows the deployment of systems that are protected against quantum computing attacks as well as against classical attacks.”
 
-Additionally, an Internet Draft standardizing NTRU-based ciphersuites in Transport Layer Security (TLS) is currently progressing through the Internet Engineering Task Force (IETF) 
+Additionally, an [Internet Draft standardizing NTRU-based ciphersuites in Transport Layer Security (TLS)](https://tools.ietf.org/html/draft-whyte-select-pkc-qsh-00) is currently progressing through the Internet Engineering Task Force (IETF) 
 
 Is NTRU Patented?
 -----------------
@@ -130,7 +131,7 @@ For commercial (not open source) applications of NTRUMLS or PASS, Security Innov
 
 Is replacing RSA with NTRUEncrypt the best solution moving forward?
 ------------------------------------------------------------
-We don’t think a single encryption solution is the best idea, regardless of the algorithm.  Double encryption using two fast algorithms such as NTRU plus another post-quantum crypto algorithm, or even ECC, would provide far greater security at a considerable higher performance than RSA alone today.  Our Chief Scientist, William Whyte, wrote a blog post on this subject. (http://blog.securityinnovation.com/blog/2013/08/king-rsa-cryptos-successor-why-we-need-to-move-away-from-a-monarchy.html)
+We don’t think a single encryption solution is the best idea, regardless of the algorithm.  Double encryption using two fast algorithms such as NTRU plus another post-quantum crypto algorithm, or even ECC, would provide far greater security at a considerable higher performance than RSA alone today.  Our Chief Scientist, William Whyte, wrote a [blog post](http://blog.securityinnovation.com/blog/2013/08/king-rsa-cryptos-successor-why-we-need-to-move-away-from-a-monarchy.html) on this subject.
 
 Doesn’t open sourcing make NTRUEncrypt implementations more vulnerable to hackers?
 ---------------------------------------------------------------------------
@@ -138,8 +139,8 @@ On the contrary:  NTRU has been tested by several external groups in addition to
 
 I read that NTRU doesn’t always decrypt properly.  Is that true?
 ------------------------------------------------------------------------------------
-With NTRU, there's a tradeoff to be made in terms of the parameter q. The larger q is, the larger keys and ciphertexts are; the smaller it is, the greater the chance that a valid ciphertext will fail to decrypt. An attacker learns information from these decryption failures, so it's important to stop this happening. For sufficiently large q, there will be no decryption failures at all, and in fact some sets of NTRU parameters have had this property. However, it's not necessary to go this far. In practice, we can choose q for a security level of k bits so that the chance of a decryption failure is 2^-k. There's no need for a higher level of protection against decryption failures, because once the decryption failure probability drops below 2^-k, the attacker will simply choose a different attack method. This choice of q gives the optimum size parameters for a given security level. So the answer to "Does NTRU decrypt correctly now?" is "Yes!" (except with negligible probability).
+With NTRU, there's a tradeoff to be made in terms of the parameter q. The larger q is, the larger keys and ciphertexts are; the smaller it is, the greater the chance that a valid ciphertext will fail to decrypt. An attacker learns information from these decryption failures, so it's important to stop this happening. For sufficiently large q, there will be no decryption failures at all, and in fact some sets of NTRU parameters have had this property. However, it's not necessary to go this far. In practice, we can choose q for a security level of k bits so that the chance of a decryption failure is 2^(-k). There's no need for a higher level of protection against decryption failures, because once the decryption failure probability drops below 2^(-k), the attacker will simply choose a different attack method. This choice of q gives the optimum size parameters for a given security level. So the answer to "Does NTRU decrypt correctly now?" is "Yes!" (except with negligible probability).
 
 Where can I get more technical information
 ------------------------------------------
-Go to https://www.securityinnovation.com/products/encryption-libraries/ntru-crypto/ntru-resources.html which is where we’ve collected a boatload of content on NTRU including NIST reports, the math and other very useful stuff.
+The [NTRU Resources webpage](https://www.onboardsecurity.com/products/ntru-crypto/ntru-resources) contains a collection of boatload content on NTRU including NIST reports, mathematical resources and other very useful stuff.
